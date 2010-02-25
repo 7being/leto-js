@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+	<script type="text/javascript" src="../../jsunit/app/jsUnitCore.js"></script>
+	<script type="text/javascript" src="../leto.js"></script>
+	<script type="text/javascript" src="leto.string.js"></script>
+	<script type="text/javascript">
+	/**
+	 * ogre.lang.String test
+	 * string prototyping
+	 */
+	ogre.extend(String.prototype, ogre.lang.String.prototype, true);
+
+	// blank
+	function testBlank() {
+		assertTrue("".blank());
+		assertTrue("  ".blank());
+		assertFalse("a".blank());
+		assertFalse("a\n ".blank());
+	};
+	// capitalize	
+	function testCapitalize() {
+		assertEquals("hello".capitalize(), "Hello");
+		assertEquals("hello world".capitalize(), "Hello world");
+		assertEquals("Hello world".capitalize(true), "Hello World");
+		assertEquals("hello world\nnerd".capitalize(true), "Hello World\nNerd");
+		assertEquals("hello world\nnerd".capitalize(), "Hello world\nnerd");
+	};
+	// casecmp
+	function testCasecmp() {
+		assertTrue("".casecmp(""));
+		assertTrue((new String("hello world")).casecmp("HELLO worlD"));
+		assertTrue("hello World".casecmp("HeLLo WORld"));
+		assertTrue("hello\nworld\nNERD".casecmp("HELLO\nworld\nNERD"));
+	};
+	// chomp
+	function testChomp() {
+		assertEquals("hello".chomp(), "hello");	
+		assertEquals("hello\n".chomp(), "hello");	
+		assertEquals("hello\r\n".chomp(), "hello");	
+		assertEquals("hello\n\r".chomp(), "hello\n");	
+		assertEquals("hello\r".chomp(), "hello");	
+		assertEquals("hello \n world".chomp(), "hello \n world");	
+		assertEquals("hello".chomp("llo"), "he");
+        assertEquals("hello".chomp("p"), "hello");
+	};
+	// chop
+	function testChop() {
+		assertEquals("hello\r\n".chop(), "hello");
+		assertEquals("hello\n\r".chop(), "hello\n");
+		assertEquals("hello\n".chop(), "hello");
+		assertEquals("hello".chop(), "hell");
+		assertEquals("x".chop().chop(), "");
+	};
+	// center
+	function testCenter() {
+		assertEquals("hello".center(4), "hello");
+		assertEquals("hello".center(20), "       hello        ");
+		assertEquals("hello".center(20, '123'), "1231231hello12312312");
+	};
+    // count
+    function testCount() {
+        assertEquals("abbcccdddd".count('z'), 0);
+        assertEquals("abbcccdddd".count('a'), 1);
+        assertEquals("abbcccdddd".count('b'), 2);
+        assertEquals("abbcccdddd".count('c'), 3);
+        assertEquals("abbcccdddd".count('d'), 4);
+        assertEquals("abbcccdddd".count('^a'), 9);
+        assertEquals("abbcccdddd".count('ab', 'bc'), 2);
+        assertEquals("abbcccdddd".count('ab', 'bc', '^b'), 0);
+        assertEquals("^//\\\\\\".count('a^', '^a'), 1);
+        assertEquals("^//\\\\\\".count('/'), 2);
+        assertEquals("^//\\\\\\".count("\\"), 3);
+    };
+    // each
+    function testEach() {
+        var arr = [];
+        "hello\nworld".each(function(s){arr.push(s);});
+        assertEquals(arr.length, 2);
+        assertEquals(arr[0], "hello\n");
+        assertEquals(arr[1], "world");
+        arr.length = 0;
+        "hello\nworld".each('l', function(s){arr.push(s);});
+        assertEquals(arr.length, 4);
+        assertEquals(arr[0], "hel");
+        assertEquals(arr[1], "l");
+        assertEquals(arr[2], "o\nworl");
+        assertEquals(arr[3], "d");
+        arr.length = 0;
+        "hello\n\n\nworld".each('', function(s){arr.push(s);});
+        assertEquals(arr.length, 2);
+        assertEquals(arr[0], "hello\n\n\n");
+        assertEquals(arr[1], "world");
+    };
+	// empty
+	function testEmpty() {
+		assertTrue("".empty());
+		assertFalse(" ".empty());
+	};
+    // gsub
+    function testGsub() {
+        assertEquals("abc".gsub("", "|"), "|a|b|c|");
+        assertEquals("abcbdbe".gsub("b", "ok"), "aokcokdoke");
+        assertEquals("a bd c bd e".gsub(/\s(bd)\s/, "<$1>"), "a<bd>c<bd>e");
+        assertEquals(" space   ".gsub(/\s+/, ""), "space");
+        assertEquals("/a/b/c/e\\f\\".gsub("/", "T"), "TaTbTcTe\\f\\");
+        assertEquals("/a/b/c/e\\f\\".gsub("\\", "T"), "/a/b/c/eTfT");
+        assertEquals('![a pear](/img/pear.jpg) ![an orange](/img/orange.jpg)'.gsub(/!\[(.*?)\]\((.*?)\)/, function(m){
+            return '<img alt="' + m[1] + '" src="' + m[2] + '" />';             
+            }), '<img alt="a pear" src="/img/pear.jpg" /> <img alt="an orange" src="/img/orange.jpg" />');
+    };
+	// include
+	function testInclude() {
+		assertTrue("hello".include("lo"));
+		assertTrue("hello".include("h"));
+		assertFalse("hello".include("ol"));
+	};
+    // insert
+    function testInsert() {
+        assertEquals("abcd".insert(0, "X"), "Xabcd");
+        assertEquals("abcd".insert(3, "X"), "abcXd");
+        assertEquals("abcd".insert(4, "X"), "abcdX");
+        assertEquals("abcd".insert(-3, "X"),"abXcd");
+        assertEquals("abcd".insert(-1, "X"),"abcdX");
+    };
+	// scan
+	function testScan() {
+		var s = "cruel world";
+		var a = ["cruel", "world"];
+		var b = s.scan(/\w+/);
+		assertTrue(ogre.equal(a, b));
+
+		a = ["cru", "el ", "wor"];
+		b = s.scan(/.../);
+		assertTrue(ogre.equal(a, b));
+
+		a = [["cru"], ["el "], ["wor"]];
+		b = s.scan(/(...)/);
+		assertTrue(ogre.equal(a, b));
+
+		a = [["cr", "ue"], ["l ", "wo"]];
+		b = s.scan(/(..)(..)/);
+		assertTrue(ogre.equal(a, b));
+
+		var arr = [];
+		s.scan(/(.)(.)/, function(x, y){
+			arr.push(y, x);
+		});
+		assertEquals(arr.join(''), "rceu lowlr");
+	};
+	// squeeze
+	function testSqueeze() {
+		assertEquals("yellow moon".squeeze(), "yelow mon");
+		assertEquals("  now   is   the".squeeze(" "), " now is the");
+		assertEquals("putters shoot balls".squeeze("m-z"), "puters shot balls");
+	};
+	// squish
+	function testSquish() {
+		assertEquals("      foo        \t     \n   bar   boo".squish(), "foo bar boo");
+		assertEquals("        boo     ".squish(), "boo");
+	};
+	// ljust
+	function testLjust() {
+		assertEquals("hello".ljust(4), "hello");
+		assertEquals("hello".ljust(20),			"hello               ");
+		assertEquals("hello".ljust(20, '1234'), "hello123412341234123");
+	};
+	// lstrip
+	function testLstrip() {
+		assertEquals("hello".lstrip(), "hello");
+		assertEquals("  hello  ".lstrip(), "hello  ");
+		assertEquals("\thello\r\n".lstrip(), "hello\r\n");
+	};
+    // remove
+    function testRemove() {
+        assertEquals("abbcccdddd".remove('z'), "abbcccdddd");
+        assertEquals("abbcccdddd".remove('a'), "bbcccdddd");
+        assertEquals("abbcccdddd".remove('b'), "acccdddd");
+        assertEquals("abbcccdddd".remove('c'), "abbdddd");
+        assertEquals("abbcccdddd".remove('d'), "abbccc");
+        assertEquals("abbcccdddd".remove('^a'), "a");
+        assertEquals("abbcccdddd".remove('ab', 'bc'), "acccdddd");
+        assertEquals("abbcccdddd".remove('ab', 'bc', '^b'), "abbcccdddd");
+        assertEquals("^//\\\\\\".remove('a^', '^a'), "//\\\\\\");
+        assertEquals("^//\\\\\\".remove('/'), "^\\\\\\");
+        assertEquals("^//\\\\\\".remove("\\"), "^//");
+    };
+	// rescape
+	function testRescape() {
+		assertEquals("a.b[100]".rescape(), "a\\.b\\[100\\]");
+	};
+	// reverse
+	function testReverse() {
+		assertEquals("".reverse(), "");
+		assertEquals("hello world".reverse(), "dlrow olleh");
+	};
+	// rjust
+	function testRjust() {
+		assertEquals("hello".rjust(4), "hello");
+		assertEquals("hello".rjust(20), "               hello");
+		assertEquals("hello".rjust(20, '1234'), "123412341234123hello");
+	};
+	// rstrip
+	function testRstrip() {
+		assertEquals("hello".rstrip(), "hello");
+		assertEquals("  hello  ".rstrip(), "  hello");
+		assertEquals("\thello\r\n".rstrip(), "\thello");
+	};
+	// strip
+	function testStrip() {
+		assertEquals("hello".strip(), "hello");
+		assertEquals("  hello  ".strip(), "hello");
+		assertEquals("\thello\r\n".strip(), "hello");
+	};
+	// sub
+    function testSub() {
+        assertEquals("abc".sub("", "|"), "|abc");
+        assertEquals("abcbdbe".sub("b", "ok"), "aokcbdbe");
+        assertEquals("a bd c bd e".sub(/\s(bd)\s/, "<$1>"), "a<bd>c bd e");
+        assertEquals(" space   ".sub(/\s+/, ""), "space   ");
+        assertEquals("/a/b/c/e\\f\\".sub("/", "T"), "Ta/b/c/e\\f\\");
+        assertEquals("/a/b/c/e\\f\\".sub("\\", "T"), "/a/b/c/eTf\\");
+    };
+
+	// succ
+	function testSucc() {
+		assertEquals("abcd".succ(), "abce");	
+		assertEquals("THX1138".succ(), "THX1139");	
+		assertEquals("<<koala>>".succ(), "<<koalb>>");	
+		assertEquals("1999zzz".succ(), "2000aaa");	
+		assertEquals("ZZZ9999".succ(), "AAAA0000");	
+		assertEquals("***".succ(), "**+");	
+	};
+	// swapcase
+	function testSwapcase() {
+		assertEquals("Hello".swapcase(), "hELLO");
+		assertEquals("cYbEr_PuNkll".swapcase(), "CyBeR_pUnKLL");
+	};
+	// toQueryParams
+	function testToQueryParams() {
+		var a = "id=12&name=bill&gender=male&".toQueryParams();
+		var a1 = {id: '12', name: 'bill', gender: 'male'};
+		assertTrue(ogre.equal(a, a1));
+
+		var b = "id=12&id=13&id=14&name=bill&gender=male&".toQueryParams();
+		var b1 = {id: ['12', '13', '14'], name: 'bill', gender: 'male'};
+		assertTrue(ogre.equal(b, b1));
+
+	};
+	// truncate
+	function testTruncate() {
+		assertEquals("hello world, hello world, hello world".truncate(), "hello world, hello world, h...");
+		assertEquals("hello world, hello world".truncate(10), "hello w...");
+		assertEquals("hello world, hello world".truncate(10, '!!!'), "hello w!!!");
+	};
+	// upto
+	function testUpto() {
+		var arr = [];
+		"a8".upto("b6", function(s) {
+			arr.push(s);
+		});
+		arr = arr.join('') + '';
+		assertEquals("a8a9b0b1b2b3b4b5b6", arr);
+		arr = [];
+		"m".upto("z", function(s) {
+			arr.push(s);
+		});
+		arr = arr.join('') + '';
+		assertEquals("mnopqrstuvwxyz", arr);
+	};
+	</script>
+</head>
+<body>
+	<h1>Test ogre/lang/String.js</h1>
+	<form name="form1">
+		<input type="hidden" value="foo"/>
+	</form>
+</body>
+</html>

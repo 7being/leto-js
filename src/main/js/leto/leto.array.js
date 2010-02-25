@@ -1,0 +1,9 @@
+(function(){
+
+leto.array =
+{
+};
+
+})();
+
+//  EOF
