@@ -1,7 +1,16 @@
-(function(){
-
+(function() {
+//==========================================================================
+// STRING
+//========================================================================== 
 var self = leto.string =
 {
+	//==========================================================================
+	// PUBLIC METHODS
+	//========================================================================== 
+	
+	//--------------------------------------------------------------------------
+    // BLANK
+    //--------------------------------------------------------------------------
     /*
      * Check if the string is either empty or containing 
      *
@@ -19,6 +28,9 @@ var self = leto.string =
         return !/\S/.test(string); 
     },
 
+	//--------------------------------------------------------------------------
+    // CAPITALIZE
+    //--------------------------------------------------------------------------
     /**
      * Capitalizes the first letter of a string and downcases
      * all the others. <i>upword</i> default <tt>false</tt>.
@@ -48,6 +60,9 @@ var self = leto.string =
         }
     },
 
+	//--------------------------------------------------------------------------
+    // CASECMP
+    //--------------------------------------------------------------------------
     /**
      * Case-insensitive version of <i>str</i> === <i>other_str</i>
      *
@@ -66,6 +81,9 @@ var self = leto.string =
             && string.toLowerCase() === other.toLowerCase();
     },
 
+	//--------------------------------------------------------------------------
+    // CENTER
+    //--------------------------------------------------------------------------
     /**
      * If <i>width</i> is greater than the length of <i>str</i>, return a string 
      * of length <i>width</i> with <i>str</i> centered and padded with <i>padstr</i>;
@@ -92,6 +110,9 @@ var self = leto.string =
         return string;
     },
 
+	//--------------------------------------------------------------------------
+    // CHOMP
+    //--------------------------------------------------------------------------
     /**
      * Returns a string with the give record separator(default $/) 
      * removed from the end of <i>str</i> (if present). default $/
@@ -126,6 +147,9 @@ var self = leto.string =
         }
     },
 
+	//--------------------------------------------------------------------------
+    // CHOP
+    //--------------------------------------------------------------------------
     /**
      * Returns a string with the last char removed. If the string ends
      * with \r\n, both chars are removed. {@link leto.string#chomp}
@@ -149,6 +173,9 @@ var self = leto.string =
                 string.slice(0, string.length-2) : string.slice(0, string.length-1);
     },
 
+	//--------------------------------------------------------------------------
+    // COUNT
+    //--------------------------------------------------------------------------
     /**
      * Each <i>other_str</i> parameter defines a set of characters to count. The 
      * intersection of these sets defines the characters to count in str. 
@@ -194,6 +221,9 @@ var self = leto.string =
         }
     },
 
+	//--------------------------------------------------------------------------
+    // EACH
+    //--------------------------------------------------------------------------
     /**
      * Splits <i>str</i> using the supplied parameter as the record separator
      * ($/ by default), passing each substring in turn to the supplied function.
@@ -267,6 +297,9 @@ var self = leto.string =
         }
     },
 
+	//--------------------------------------------------------------------------
+    // EACHCHAR
+    //--------------------------------------------------------------------------
     /**
      * Iterates each character in <i>self</i>.
      */
@@ -278,6 +311,9 @@ var self = leto.string =
         }
     },
 
+	//--------------------------------------------------------------------------
+    // EMPTY
+    //--------------------------------------------------------------------------
     /**
      * Returns <tt>true</tt> if <i>str</i> has a length of zero.
      *
@@ -294,6 +330,9 @@ var self = leto.string =
         return !string.length;
     },
 
+	//--------------------------------------------------------------------------
+    // GSUB
+    //--------------------------------------------------------------------------
     /**
      * Returns a copy of <i>str</i> with <i>all</i> occurrences
      * of <i>pattern</i> replaced with <i>replacement (string or
@@ -331,6 +370,9 @@ var self = leto.string =
         return replacement.call(string, pattern);
     },
 	
+	//--------------------------------------------------------------------------
+    // INCLUDE
+    //--------------------------------------------------------------------------
     /**
      * Returns <tt>true</tt> if <i>str</i> contains the given string or
      * character.
@@ -349,6 +391,9 @@ var self = leto.string =
         return string.indexOf(other) > -1;
     },
 
+	//--------------------------------------------------------------------------
+    // INSERT
+    //--------------------------------------------------------------------------
     /**
      * Returns a new string that inserts <i>other_str</i> before 
      * the character at the give <i>index</i>. Negative indices 
@@ -387,6 +432,9 @@ var self = leto.string =
         return string;
     },
     
+	//--------------------------------------------------------------------------
+    // SCAN
+    //--------------------------------------------------------------------------
     /**
      * Iterate through <i>str</i>, matching the <i>pattern</i> (which 
      * may be a <tt>Regexp</tt> or a <tt>String</tt>). For each match, 
@@ -440,6 +488,9 @@ var self = leto.string =
         if (rs) return rs;
     },
 
+	//--------------------------------------------------------------------------
+    // SQUEEZE
+    //--------------------------------------------------------------------------
     /**
      * Builds a set of characters from the <i>other_str</i> parameter(s) using 
      * the procedure described for {@link leto.string#count}. Returns a new 
@@ -511,6 +562,9 @@ var self = leto.string =
         return sb.join('');
     },
 
+	//--------------------------------------------------------------------------
+    // SQUISH
+    //--------------------------------------------------------------------------
     /**
      * Returns the string, first removing all whitespaces on both
      * ends of the <i>str</i>, and then changing remaning consecutive
@@ -529,6 +583,9 @@ var self = leto.string =
         return self.strip(string).replace(/\s\s\s*/g, ' ');
     },
 
+	//--------------------------------------------------------------------------
+    // SUB
+    //--------------------------------------------------------------------------
     /**
      * Same as {@link leto.string#gsub}, except <tt>sub</tt>
      * only replace the first occurrence of <i>pattern</i>
@@ -554,6 +611,9 @@ var self = leto.string =
         return replacement.call(string, pattern);	
     },
 
+	//--------------------------------------------------------------------------
+    // SUCC
+    //--------------------------------------------------------------------------
     /**
      * Returns the successor to <i>str</i>. The successor is calculated by
      * incrementing chars starting from the rightmost alphanumeric (or the
@@ -643,6 +703,9 @@ var self = leto.string =
         }
     },
 
+	//--------------------------------------------------------------------------
+    // SWAPCASE
+    //--------------------------------------------------------------------------
     /**
      * Returns a copy of <i>str</i> with uppercase alphabetic chars converted
      * to lowercase and lowercase chars converted to uppercase.
@@ -663,6 +726,9 @@ var self = leto.string =
         });
     },
 
+	//--------------------------------------------------------------------------
+    // LJUST
+    //--------------------------------------------------------------------------
     /**
      * If <i>width</i> is greater that the length of <i>str</i>, return a
      * string of length <i>width</i> left justified and padded with <i>padstr</i>;
@@ -698,6 +764,9 @@ var self = leto.string =
         return string;
     },
 
+	//--------------------------------------------------------------------------
+    // RJUST
+    //--------------------------------------------------------------------------
     /**
      * If <i>width</i> is greater that the length of <i>str</i>, return a
      * string of length <i>width</i> right justified and padded with <i>padstr</i>;
@@ -733,6 +802,9 @@ var self = leto.string =
         return string;
     },
 
+	//--------------------------------------------------------------------------
+    // REMOVE
+    //--------------------------------------------------------------------------
     /**
      * Returns a copy of str with all characters in the intersection 
      * of its arguments removed. Uses the same rules for building 
@@ -786,7 +858,10 @@ var self = leto.string =
             }
         }
     },
-
+	
+	//--------------------------------------------------------------------------
+    // STRIP
+    //--------------------------------------------------------------------------
     /**
      * Returns a copy of <i>str</i> with leading and trailing whitespace 
      * removed.
@@ -804,6 +879,9 @@ var self = leto.string =
         return self.rstrip(self.lstrip(string));
     },
 
+	//--------------------------------------------------------------------------
+    // LSTRIP
+    //--------------------------------------------------------------------------
     /**
      * Returns a copy of <i>str</i> with leading whitespaces removed.
      * See also {@link leto.string.rstrip} and {@link leto.string.strip}
@@ -820,6 +898,9 @@ var self = leto.string =
         return string.replace(/^\s\s*/, '');	
     },
 
+	//--------------------------------------------------------------------------
+    // REVERSE
+    //--------------------------------------------------------------------------
     /**
      * Reverses a copy of <i>str</i> and return.
      *
@@ -840,6 +921,9 @@ var self = leto.string =
         return sb.join('');
     },
 
+	//--------------------------------------------------------------------------
+    // RSTRIP
+    //--------------------------------------------------------------------------
     /**
      * Returns a copy of <i>str</i> with trailing whitespaces removed.
      * See also {@link leto.string#lstrip} and {@link leto.string#strip}
@@ -856,6 +940,9 @@ var self = leto.string =
         return string.replace(/\s\s*$/, '');	
     },
 
+	//--------------------------------------------------------------------------
+    // RESCAPE
+    //--------------------------------------------------------------------------
     /**
      * Escapes all regular expression character from the <i>str</i>
      *
@@ -871,6 +958,9 @@ var self = leto.string =
         return string.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1');
     },
 
+	//--------------------------------------------------------------------------
+    // FORMAT
+    //--------------------------------------------------------------------------
     /**
      *
      */
@@ -883,6 +973,9 @@ var self = leto.string =
         });
     },
 
+	//--------------------------------------------------------------------------
+    // TO QUERY PARAMS
+    //--------------------------------------------------------------------------
     /**
      * Parse an url like query string to a hash like object.
      *
@@ -937,6 +1030,9 @@ var self = leto.string =
         return obj;
     },
 
+	//--------------------------------------------------------------------------
+    // TRUNCATE
+    //--------------------------------------------------------------------------
     /**
      * Truncate <i>str</i> to given <i>width</i> - <i>suffix.length</i>, 
      * and append with <i>suffix</i>
@@ -958,6 +1054,9 @@ var self = leto.string =
             string.slice(0, length - suffix.length) + suffix : string;
     },
 
+	//--------------------------------------------------------------------------
+    // UPTO
+    //--------------------------------------------------------------------------
     /**
      * Iterates through successive values, starting at <i>str</i> and
      * ending at <i>other_str</i> inclusive, passing each value in to
@@ -992,112 +1091,124 @@ var self = leto.string =
     }
 };
 
+	//==========================================================================
+	// PRIVATE METHODS
+	//========================================================================== 
 
-/**
- * @private
- */
-function _makeSubPattern(pattern, global)
-{
-    var t = leto.type(pattern);
-    if (t == 'string')
-    {
-        var f = global ? 'g' : '';
-        return new RegExp(pattern.rescape(), f);
-    }
-    if (t == 'regexp')
-    {
-        if ((global && !pattern.global)
-        || (!global && pattern.global)) {
-                var s = pattern.toString();
-                var i = s.lastIndexOf('/');
-                var f = s.slice(i + 1)
-                f = global ? (f + 'g') : f.replace('g', '');
-                s = s.slice(1, i);
-                pattern = new RegExp(s, f);
-        }
-        return pattern;
-    }
-    throw 'Illegal pattern ' + pattern;
-}
+	//--------------------------------------------------------------------------
+	// MAKE SUB PATTERN
+	//--------------------------------------------------------------------------
+	/**
+	 * @private
+	 */
+	function _makeSubPattern(pattern, global)
+	{
+		var t = leto.type(pattern);
+		if (t == 'string')
+		{
+			var f = global ? 'g' : '';
+			return new RegExp(pattern.rescape(), f);
+		}
+		if (t == 'regexp')
+		{
+			if ((global && !pattern.global)
+			|| (!global && pattern.global)) {
+					var s = pattern.toString();
+					var i = s.lastIndexOf('/');
+					var f = s.slice(i + 1)
+					f = global ? (f + 'g') : f.replace('g', '');
+					s = s.slice(1, i);
+					pattern = new RegExp(s, f);
+			}
+			return pattern;
+		}
+		throw 'Illegal pattern ' + pattern;
+	}
 
-/**
- * @private
- */
-function _makeSubReplacement(string, replacement, global)
-{
-    var t = leto.type(replacement);
-    if (t == 'string')
-    {
-        return function(pattern)
-        {
-            return string.replace(pattern, replacement);
-        };
-    }
-    if (t == 'function')
-    {
-        return function(pattern)
-        {
-            var result = [], lindex = 0, match;
-            while (match = pattern.exec(string))
-            {
-                result.push(string.slice(lindex, match.index)); 
-                result.push(replacement(match));
-                lindex = pattern.lastIndex;
-                if (!global) break;
-            }
-            result.push(string.slice(lindex));
-            return result.join('');
-        };
-    }
-    throw 'Illegal replacement ' + replacement;
-}
+	//--------------------------------------------------------------------------
+	// MAKE SUB REPLACEMENT
+	//--------------------------------------------------------------------------
+	/**
+	 * @private
+	 */
+	function _makeSubReplacement(string, replacement, global)
+	{
+		var t = leto.type(replacement);
+		if (t == 'string')
+		{
+			return function(pattern)
+			{
+				return string.replace(pattern, replacement);
+			};
+		}
+		if (t == 'function')
+		{
+			return function(pattern)
+			{
+				var result = [], lindex = 0, match;
+				while (match = pattern.exec(string))
+				{
+					result.push(string.slice(lindex, match.index)); 
+					result.push(replacement(match));
+					lindex = pattern.lastIndex;
+					if (!global) break;
+				}
+				result.push(string.slice(lindex));
+				return result.join('');
+			};
+		}
+		throw 'Illegal replacement ' + replacement;
+	}
 
-/**
- * @private
- */
-function _parseCharsetRules()
-{
-    var inc = [], esc = [];
-    var args = Array.prototype.slice.call(arguments, 1);
-    for (var i = 0; i < args.length; i++)
-    {
-        // parse sequence
-        var item = args[i].gsub(/(\w)-(\w)/, function(m)
-        {
-            var tmp = [];    
-            m[1].upto(m[2], function(c) { tmp.push(c) });
-            return tmp.join('');
-        });
+	//--------------------------------------------------------------------------
+	// PARSE CHARSET RULES
+	//--------------------------------------------------------------------------
+	/**
+	 * @private
+	 */
+	function _parseCharsetRules()
+	{
+		var inc = [], esc = [];
+		var args = Array.prototype.slice.call(arguments, 1);
+		for (var i = 0; i < args.length; i++)
+		{
+			// parse sequence
+			var item = args[i].gsub(/(\w)-(\w)/, function(m)
+			{
+				var tmp = [];    
+				m[1].upto(m[2], function(c) { tmp.push(c) });
+				return tmp.join('');
+			});
 
-        var tmp = item.split('');
-        // parse negated
-        if (tmp[0] == '^')
-        {
-            tmp.shift();
-            esc = esc.concat(tmp);
-        }
-        else
-        {
-            // parse intersection
-            if (inc.length)
-            {
-                inc = inc.select(function(c) { return tmp.include(c) }).uniq();
-            }
-            else
-            {
-                inc = tmp.uniq();
-            } 
-        }
-    }
+			var tmp = item.split('');
+			// parse negated
+			if (tmp[0] == '^')
+			{
+				tmp.shift();
+				esc = esc.concat(tmp);
+			}
+			else
+			{
+				// parse intersection
+				if (inc.length)
+				{
+					inc = inc.select(function(c) { return tmp.include(c) }).uniq();
+				}
+				else
+				{
+					inc = tmp.uniq();
+				} 
+			}
+		}
 
-    esc = esc.uniq();
-    if (inc.length)
-    {
-        inc.remove.apply(inc, esc);
-        esc.clear();
-    }
-    return {'inc': inc, 'esc': esc};
-}
+		esc = esc.uniq();
+		if (inc.length)
+		{
+			inc.remove.apply(inc, esc);
+			esc.clear();
+		}
+		return {'inc': inc, 'esc': esc};
+	}
 
 })();
 

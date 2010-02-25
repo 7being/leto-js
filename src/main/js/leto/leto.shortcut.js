@@ -1,7 +1,9 @@
-(function($){
-
-execute = leto.mvc.Dispatcher.dispatchAction;
-render = leto.mvc.Dispatcher.dispatchRender;
+(function($) {
+//==========================================================================
+// SHORTCUT
+//========================================================================== 
+execute = leto.mvc.dispatcher.execute;
+render = leto.mvc.dispatcher.render;
 leto.a = leto.array;
 leto.h = leto.hash;
 leto.s = leto.string;

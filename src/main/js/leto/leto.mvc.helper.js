@@ -1,4 +1,7 @@
 (function() {
+//==========================================================================
+// MVC HELPER
+//========================================================================== 
 /**
  * exported Global namespace & functions
  * 
@@ -9,12 +12,18 @@
  */
 leto.namespace('leto.mvc');
 
-var self = leto.mvc.Helper =
+var self = leto.mvc.helper =
 {
+	//==========================================================================
+    // PUBLIC METHODS
+    //==========================================================================
+
+    //--------------------------------------------------------------------------
+    // PARAMS
+    //--------------------------------------------------------------------------
     params: function(selector, context)
     {
         var result = {};
-        var _val = self._val;
 
         $(selector, context).each(function(index)
         {
@@ -64,13 +73,25 @@ var self = leto.mvc.Helper =
         return result;
     },
 
+    //--------------------------------------------------------------------------
+    // EXPAND
+    //--------------------------------------------------------------------------
     expand: function(selector, context, delim)
     {
-        var params = moho.support.params(selector, context);
-        return self._expandProperties(params, delim);
-    },
+        var params = self.params(selector, context);
+        return _expandProperties(params, delim);
+    }
 
-    _val: function(el)
+};
+
+	//==========================================================================
+    // PRIVATE METHODS
+    //==========================================================================
+
+    //--------------------------------------------------------------------------
+    // VAL
+    //--------------------------------------------------------------------------
+    var _val = function(el)
     {
         try
         {
@@ -81,9 +102,12 @@ var self = leto.mvc.Helper =
             //jQuery.val throws TypeError if el.value is not a string(eg. number)
             return el.value;
         }
-    },
-
-    _expandProperties: function(obj, delim)
+    };
+	
+	//--------------------------------------------------------------------------
+    // EXPAND PROPERTIES
+    //--------------------------------------------------------------------------
+    _expandProperties = function(obj, delim)
     {
         var result = {};
         
@@ -105,8 +129,7 @@ var self = leto.mvc.Helper =
             }
         }
         return result;
-    }
-};
+    };
  
 })();
 

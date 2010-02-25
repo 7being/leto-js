@@ -1,19 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>Leto.js Tests</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="../css/jsUnitStyle.css">
-<script type="text/javascript" src="../app/jsUnitCore.js"></script>
-<script type="text/javascript" src="Leto.js"></script>
-<script type="text/javascript">
+import leto.js
 
-function testNamespace() {
-    try {
+function testNamespace()
+{
+    try 
+	{
         a.b.c.d.e.f.g.h.i;
         fail("should be undefined before set namespace");
-    } catch (e) {
-        Leto.namespace("a.b.c.d.e.f.g.h.i");
+    }
+	catch (e)
+	{
+        leto.namespace("a.b.c.d.e.f.g.h.i");
         assertNotUndefined("should be defined after set namespace", a.b.c.d.e.f.g.h.i);
     }
 }
@@ -493,12 +489,3 @@ function assertNonJsUnitFailure(comment, allegedNonJsUnitFailure) {
     assertNotUndefined(comment, allegedNonJsUnitFailure.description);
 }
 */
-</script>
-</head>
-
-<body>
-<h1>Leto.js Tests</h1>
-
-<p>This page contains tests for the Leto.js functions. To see them, take a look at the source.</p>
-</body>
-</html>

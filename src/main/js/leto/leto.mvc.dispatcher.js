@@ -1,32 +1,19 @@
 (function() {
 //==========================================================================
-// DISPATCHER
+// MVC DISPATCHER
 //========================================================================== 
 leto.namespace('leto.mvc');
 
-var self = leto.mvc.Dispatcher = function() 
-{
-
-	//==========================================================================
-    // MEMBERS
+leto.mvc.dispatcher =
+{   
     //==========================================================================
-	var that = this;
-
-	var _controlTable = {};
-    var _viewTable = {};
-
-	//==========================================================================
-    // PROPERTIES
-    //==========================================================================
-    
-    //==========================================================================
-    // METHODS
+    // PUBLIC METHODS
     //==========================================================================
 
     //--------------------------------------------------------------------------
     // REGISTER CONTROLLER
     //--------------------------------------------------------------------------
-	this.registerController = function(controlName, controlObj) 
+	registerController: function(controlName, controlObj) 
 	{
         if (_controlTable[controlName] && _controlTable[controlName] !== controlObj)
         {
@@ -34,12 +21,12 @@ var self = leto.mvc.Dispatcher = function()
                 + controlName;
         }
 		_controlTable[controlName] = controlObj;
-	};
+	},
 
     //--------------------------------------------------------------------------
     // REGISTER VIEW
     //--------------------------------------------------------------------------
-    this.registerView = function(viewName, viewObj) 
+    registerView: function(viewName, viewObj) 
     {
         if (_viewTable[controlName] && _viewTable[controlName] !== controlObj)
         {
@@ -48,12 +35,12 @@ var self = leto.mvc.Dispatcher = function()
         }
 
         _viewTable[viewName] = viewObj;
-    };
+    },
 
 	//--------------------------------------------------------------------------
-    // DISPATCH ACTION
+    // EXECUTE
     //--------------------------------------------------------------------------
-	this.dispatchAction = function(controlName, action, params) 
+	execute: function(controlName, action, params) 
 	{
 		var args = Array.prototype.slice.call(arguments, 2);
 
@@ -64,12 +51,12 @@ var self = leto.mvc.Dispatcher = function()
 		}
 
 		return control[action].apply(control, args);
-	};
+	},
 
     //--------------------------------------------------------------------------
-    // DISPATCH RENDER
+    // RENDER
     //--------------------------------------------------------------------------
-    this.dispatchRender = function(viewName, params) 
+    render: function(viewName, params) 
     {
         var args = Array.prototype.slice.call(arguments, 1);
 
@@ -80,21 +67,14 @@ var self = leto.mvc.Dispatcher = function()
 		}
 
 		return view.render.apply(view, args); 
-    };
-
+    }
 };
 
-self.getInstance = function() 
-{
-	if (self._instance) 
-    {
-		return self._instance;
-	}
-	return self._instance = new self();
-};
-
-execute = self.getInstance().dispatchAction;
-render = self.getInstance().dispatchRender;
+	//==========================================================================
+    // PRIVATE MEMBERS
+    //==========================================================================
+	var _controlTable = {};
+    var _viewTable = {};
 
 })();
 

@@ -1,28 +1,21 @@
-(function(){
+(function() {
 //==========================================================================
-// RENDERER
+// MVC RENDERER
 //==========================================================================
 leto.namespace('leto.mvc');
+
 /**
  * @require TrimPath.js
  */
-var self = leto.mvc.Renderer = function() 
+var self = leto.mvc.renderer =
 {
-
-    //==========================================================================
-    // MEMBERS
-    //==========================================================================
-    var that = this;
-
-    var _templateCache = {};
-
     //==========================================================================
     // PROPERTIES
     //==========================================================================
-    this.cache = true;
+    cache: true,
     
     //==========================================================================
-    // METHODS
+    // PUBLIC METHODS
     //==========================================================================
 
     //--------------------------------------------------------------------------
@@ -31,9 +24,9 @@ var self = leto.mvc.Renderer = function()
     /**
      * @require TrimPath
      */
-    this.jstRender = function(template, data) 
+    jstRender: function(template, data) 
     {
-    	if (that.cache && !_templateCache[template]) 
+    	if (self.cache && !_templateCache[template]) 
         {
             //_templateCache[template] = TrimPath.parseDOMTemplate(template)
             var templateObject = TrimPath.parseTemplate(template);
@@ -43,14 +36,14 @@ var self = leto.mvc.Renderer = function()
     	var result = templateObject.process(data);
 
         return result;
-    };
+    },
 
     //--------------------------------------------------------------------------
     // JST URL RENDER
     //--------------------------------------------------------------------------
-    this.jstUrlRender = function(templateUrl, data) 
+    stUrlRender: function(templateUrl, data) 
     {
-        if (that.cache && !_templateCache[templateUrl])
+        if (self.cache && !_templateCache[templateUrl])
         {
             var template = _fetch(templateUrl);
             _templateCache[templateUrl] = _jstParser(template);
@@ -60,7 +53,7 @@ var self = leto.mvc.Renderer = function()
         var result = jstObject.process(data);
 
         return result;
-    };
+    },
 
     //--------------------------------------------------------------------------
     // XSLT RENDER
@@ -68,20 +61,20 @@ var self = leto.mvc.Renderer = function()
     /**
      * @require Sarissa
      */
-    this.xsltRender = function(template, data) 
+    xsltRender: function(template, data) 
     {
         var xsl = _xslParser(template);
         var result = _xslTransform(xsl, data);
 
         return result;
-    };
+    },
 
     //--------------------------------------------------------------------------
     // XSLT URL RENDER
     //--------------------------------------------------------------------------
-    this.xsltUrlRender = function(templateUrl, data)
+    xsltUrlRender: function(templateUrl, data)
     {
-        if (that.cache && !_templateCache[templateUrl])
+        if (self.cache && !_templateCache[templateUrl])
         {
             var template = _fetch(templateUrl);
             _templateCache[templateUrl] = _xslParser(template);
@@ -91,7 +84,7 @@ var self = leto.mvc.Renderer = function()
         var result = _xslTransform(xsl, data);
 
         return result;
-    };
+    },
 
     //--------------------------------------------------------------------------
     // EJS RENDER
@@ -99,51 +92,57 @@ var self = leto.mvc.Renderer = function()
     /**
      * @require EJS
      */
-    this.ejsRender = function(template, data) 
+    ejsRender: function(template, data) 
     {
         var ejs = new EJS({ text: template });
         var result = ejs.render(data);
 
         return result; 
-    };
+    },
 
     //--------------------------------------------------------------------------
     // EJS URL RENDER
     //--------------------------------------------------------------------------
-    this.ejsUrlRender = function(templateUrl, data)
+    ejsUrlRender: function(templateUrl, data)
     {
         var template = _fetch(templateUrl);
         return that.ejsRender(template, data);
-    };
+    },
     
     //--------------------------------------------------------------------------
     // REPLACE WITH
     //--------------------------------------------------------------------------
-    this.replaceWith = function(selector, html) 
+    replaceWith: function(selector, html) 
     {
     	return _replaceHtml(selector, html);
-    };
+    },
 
     //--------------------------------------------------------------------------
     // APPEND TO
     //--------------------------------------------------------------------------
-    this.appendTo = function(selector, html) 
+    appendTo: function(selector, html) 
     {
         return $(selector).append(html);
-    };
+    },
 
     //--------------------------------------------------------------------------
     // PREPEND TO
     //--------------------------------------------------------------------------
-    this.prependTo = function(selector, html) 
+    prependTo: function(selector, html) 
     {
         return $(selector).prepend(html);
-    };
-    
-    //==========================================================================
-    // PRIVATE IMPLEMENTATION
-    //==========================================================================
+    }
+}; 
 
+	//==========================================================================
+    // PRIVATE MEMBERS
+    //==========================================================================
+	var _templateCache = {};
+	
+	//==========================================================================
+    // PRIVATE METHODS
+    //==========================================================================
+	
     //--------------------------------------------------------------------------
     // REPLACE HTML
     //--------------------------------------------------------------------------
@@ -224,18 +223,7 @@ var self = leto.mvc.Renderer = function()
 
         return result; 
     };
-}; 
-
-self.getInstance = function() 
-{
-    if (self._instance) 
-    {
-        return self._instance;
-    }
-    return self._instance = new self();
-};
-
-render = self.getInstance().dispatch;
+	
 
 })();
 
