@@ -48,7 +48,8 @@ function testEmptyFn()
 {
     for (var prop in leto.emptyFn)
     {
-        fail("leto.emptyFn should have properties");
+        if (prop != 'prototype')
+            fail("leto.emptyFn should not have properties");
     }
     assertObjectEquals({}, leto.emptyFn.prototype);
     assertUndefined(leto.emptyFn());

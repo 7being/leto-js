@@ -13,15 +13,15 @@ leto.mvc.dispatcher =
     //--------------------------------------------------------------------------
     // REGISTER CONTROLLER
     //--------------------------------------------------------------------------
-	registerController: function(controlName, controlObj) 
-	{
+    registerController: function(controlName, controlObj) 
+    {
         if (_controlTable[controlName] && _controlTable[controlName] !== controlObj)
         {
             throw "Found two different Controller trying to register as name: "
                 + controlName;
         }
-		_controlTable[controlName] = controlObj;
-	},
+        _controlTable[controlName] = controlObj;
+    },
 
     //--------------------------------------------------------------------------
     // REGISTER VIEW
@@ -37,21 +37,21 @@ leto.mvc.dispatcher =
         _viewTable[viewName] = viewObj;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // EXECUTE
     //--------------------------------------------------------------------------
-	execute: function(controlName, action, params) 
-	{
-		var args = Array.prototype.slice.call(arguments, 2);
+    execute: function(controlName, action, params) 
+    {
+        var args = Array.prototype.slice.call(arguments, 2);
 
-		var control = _controlTable[controlName];
-		if (!control[action])
-		{
-			throw "Action " + action + " not found in " + controlName + " controller.";
-		}
+        var control = _controlTable[controlName];
+        if (!control[action])
+        {
+            throw "Action " + action + " not found in " + controlName + " controller.";
+        }
 
-		return control[action].apply(control, args);
-	},
+        return control[action].apply(control, args);
+    },
 
     //--------------------------------------------------------------------------
     // RENDER
@@ -62,18 +62,18 @@ leto.mvc.dispatcher =
 
         var view = _viewTable[viewName];
         if (!view)
-		{
-			throw "View " + viewName + " not found.";
-		}
+        {
+            throw "View " + viewName + " not found.";
+        }
 
-		return view.render.apply(view, args); 
+        return view.render.apply(view, args); 
     }
 };
 
-	//==========================================================================
+    //==========================================================================
     // PRIVATE MEMBERS
     //==========================================================================
-	var _controlTable = {};
+    var _controlTable = {};
     var _viewTable = {};
 
 })();

@@ -195,14 +195,14 @@ var self = leto.string =
      * leto.string.count(a, "ej-m")         #=> 4
      * </pre>
      */
-    count: function(string, vargs)
+    count: function(string, varargs)
     {
         var rs = _parseCharsetRules.apply(null, arguments);
         var inc = rs.inc, esc = rs.esc;
 
         if (inc.length)
         {
-            var match = new RegExp('(' + inc.join('|').rescape() + ')', 'g');
+            var match = new RegExp('(' + self.rescape(inc.join('|')) + ')', 'g');
             var rs = string.match(match);
             return rs ? rs.length : 0;
         }
@@ -210,7 +210,7 @@ var self = leto.string =
         {
             if (esc.length)
             {
-                var match = new RegExp('[^ ' + esc.join('').rescape() + ']', 'g');
+                var match = new RegExp('[^ ' + self.rescape(esc.join('')) + ']', 'g');
                 var rs = string.match(match);
                 return rs ? rs.length : 0;
             }
@@ -298,39 +298,6 @@ var self = leto.string =
     },
 
     //--------------------------------------------------------------------------
-    // EACHCHAR
-    //--------------------------------------------------------------------------
-    /**
-     * Iterates each character in <i>self</i>.
-     */
-    eachChar: function(string, fn, bind)
-    {
-        for (var i = 0, l = string.length; i < l; i++)
-        {
-            fn.call(bind, string.charAt(i));
-        }
-    },
-
-    //--------------------------------------------------------------------------
-    // EMPTY
-    //--------------------------------------------------------------------------
-    /**
-     * Returns <tt>true</tt> if <i>str</i> has a length of zero.
-     *
-     * @return	{Boolean} If is empty <i>str</i>.
-     *
-     * @example
-     * <pre>
-     * leto.string.empty("")        #=> ture
-     * leto.string.empty("hello")   #=> false
-     * </pre>
-     */
-    empty: function(string)
-    {
-        return !string.length;
-    },
-
-    //--------------------------------------------------------------------------
     // GSUB
     //--------------------------------------------------------------------------
     /**
@@ -356,9 +323,9 @@ var self = leto.string =
      *
      * @example
      * <pre>
-     * "hello".gsub(/[aeiou]/, '*')		#=> "h*ll*"
-     * "hello".gsub(/([aeiou])/, '<$1>')	#=> "h&lt;e&gt;ll&lt;o&gt;"
-     * "hello".gsub(/./, function(m) {		#=> "&lt;h&gt;&lt;e&gt;&lt;l&gt;&lt;l&gt;&lt;o&gt;"
+     * leto.string.gsub("hello", /[aeiou]/, '*')		#=> "h*ll*"
+     * leto.string.gsub("hello", /([aeiou])/, '<$1>')	#=> "h&lt;e&gt;ll&lt;o&gt;"
+     * leto.string.gsub("hello", /./, function(m) {		#=> "&lt;h&gt;&lt;e&gt;&lt;l&gt;&lt;l&gt;&lt;o&gt;"
      *     return '<' + m[0] + '>';
      * });
      * </pre>
@@ -517,7 +484,7 @@ var self = leto.string =
             var sb = []; 
             for (var i = 0, l = string.length; i < l; i++)
             {
-                if (inc.include(string.charAt(i)))
+                if (leto.array.include(inc, string.charAt(i)))
                 {
                     continue;
                 }
@@ -532,7 +499,7 @@ var self = leto.string =
                 var sb = []; 
                 for (var i = 0, l = string.length; i < l; i++)
                 {
-                    if (esc.include(string.charAt(i)))
+                    if (leto.array.include(esc, string.charAt(i)))
                     {
                         sb.push(string.charAt(i));
                     }
@@ -723,7 +690,7 @@ var self = leto.string =
     squeeze: function(string)
     {
         var sb = [], len = string.length;
-        if (arguments.length)
+        if (arguments.length > 1)
         {
         // squeeze chars accroding to _parseCharsetRules
             var rs = _parseCharsetRules.apply(null, arguments);
@@ -734,7 +701,7 @@ var self = leto.string =
                 for (var i = 0; i < len; i++)
                 {
                     var c = string.charAt(i);
-                    if (!inc.include(c) || sb.last() !== c)
+                    if (!leto.array.include(inc, c) || leto.array.last(sb) !== c)
                     {
                         sb.push(c);
                     }
@@ -745,18 +712,19 @@ var self = leto.string =
                 // handle exclusion
                 if (esc.length)
                 {
-                    for (var i = 0; i < len; i++) {
+                    for (var i = 0; i < len; i++)
+                    {
                         var c = string.charAt(i);
-                        if (esc.include(c) || sb.last() !== c)
+                        if (leto.array.include(esc, c) || leto.array.last(sb) !== c)
                         {
-                                sb.push(c);	
+                            sb.push(c);	
                         }
                     }
                 // charset is empty
                 }
                 else
                 {
-                    string
+                    return string
                 }
             }
         }
@@ -765,7 +733,7 @@ var self = leto.string =
         // no arguments provided, so squeeze each char
             for (var i = 0; i < len; i++)
             {
-                if (sb.last() !== string.charAt(i))
+                if (leto.array.last(sb) !== string.charAt(i))
                 {
                     sb.push(string.charAt(i));
                 }	
@@ -964,12 +932,12 @@ var self = leto.string =
     /**
      *
      */
-    format: function(string, vargs)
+    format: function(string, varargs)
     {
-        var args = Array.prototype.slice.call(arguments, 1);
+        var args = arguments;
         return string.replace(/\{(\d+)\}/g, function(m, i)
         {
-            return args[i];		
+            return args[i-0+1];
         });
     },
 
@@ -983,7 +951,7 @@ var self = leto.string =
      *
      * @example
      * <pre>
-     * "id=1&name=bill&age=23&gender=male".toQueryParams()
+     * leto.string.toQueryParams("id=1&name=bill&age=23&gender=male")
      *
      * produce:
      * {
@@ -993,7 +961,7 @@ var self = leto.string =
      *     gender: 'male
      * }
      *
-     * "id=1&id=2&id=3&name=bill&age=23&gender=male".toQueryParams()
+     * leto.string.toQueryParams("id=1&id=2&id=3&name=bill&age=23&gender=male")
      *
      * produce:
      * {
@@ -1072,7 +1040,7 @@ var self = leto.string =
      *
      * @example
      * <pre>
-     * "a8".upto("b6", function(s) {
+     * leto.string.upto("a8", "b6", function(s) {
      *     print s + ' ';
      * });
      *
@@ -1172,14 +1140,14 @@ var self = leto.string =
 	function _parseCharsetRules()
 	{
             var inc = [], esc = [];
-            var args = Array.prototype.slice.call(arguments, 1);
-            for (var i = 0; i < args.length; i++)
+            var args = arguments;
+            for (var i = 1; i < args.length; i++)
             {
                 // parse sequence
                 var item = self.gsub(args[i], /(\w)-(\w)/, function(m)
                 {
                     var tmp = [];    
-                    m[1].upto(m[2], function(c) { tmp.push(c) });
+                    self.upto(m[1], m[2], function(c) { tmp.push(c) });
                     return tmp.join('');
                 });
 
@@ -1195,8 +1163,7 @@ var self = leto.string =
                     // parse intersection
                     if (inc.length)
                     {
-                        inc = leto.array.uniq(leto.array.select(inc, 
-                            function(c){ return leto.array.include(tmp, c) }));
+                        inc = leto.array.uniq(leto.array.select(inc, function(c){ return leto.array.include(tmp, c) }));
                     }
                     else
                     {
@@ -1208,9 +1175,7 @@ var self = leto.string =
             esc = leto.array.uniq(esc);
             if (inc.length)
             {
-                var a = esc;
-                a.shift(inc);
-                leto.array.remove.apply(null, a);
+                leto.array.remove.apply(null, [inc].concat(esc));
                 esc.length = 0;
             }
             return {'inc': inc, 'esc': esc};

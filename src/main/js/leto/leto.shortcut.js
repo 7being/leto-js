@@ -2,11 +2,18 @@
 //==========================================================================
 // SHORTCUT
 //========================================================================== 
-execute = leto.mvc.dispatcher.execute;
-render = leto.mvc.dispatcher.render;
+
+// lang
 leto.a = leto.array;
 leto.h = leto.hash;
 leto.s = leto.string;
+
+// mvc
+execute = leto.mvc.dispatcher.execute;
+render = leto.mvc.dispatcher.render;
+params = leto.mvc.helper.params;
+expand = leto.mvc.helper.expand;
+
 
 
 $.fn.link_to_remote = function(config)

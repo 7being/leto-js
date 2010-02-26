@@ -94,19 +94,6 @@ function testEach()
     arr.length = 0;
 }
 
-// eachChar
-function testEachChar()
-{
-    assertNotUndefined(S.eachChar);
-}
-
-// empty
-function testEmpty()
-{
-    assert(S.empty(""));
-    assertFalse(S.empty(" "));
-}
-
 // gsub
 function testGsub()
 {

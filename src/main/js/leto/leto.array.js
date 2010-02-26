@@ -1,6 +1,6 @@
 (function() {
 //==========================================================================
-// STRING
+// ARRAY
 //========================================================================== 
 var self = leto.array =
 {
@@ -238,7 +238,7 @@ var self = leto.array =
             if (type)
             {
                 //flat = flat.concat((type == 'array' || type == 'arguments') ? (array[i]).flatten() : array[i]);	
-                flat = flat.concat((type == 'array') ? (array[i]).flatten() : array[i]);	
+                flat = flat.concat((type == 'array') ? self.flatten(array[i]) : array[i]);	
             }
         }
         return flat;
@@ -287,7 +287,10 @@ var self = leto.array =
     {
         for (var i = 0, l = array.length; i < l; i++)
         {
-            if (array[i] === item) return i;
+            if (array[i] === item)
+            {
+                return i;
+            }
         }
         return -1;
     },
@@ -312,7 +315,7 @@ var self = leto.array =
      */
     insert: function(array, index, varargs)
     {
-        var items = Array.prototype.slice.call(arguments, 1);
+        var items = Array.prototype.slice.call(arguments, 2);
         if (index < -1)
         {
             index = index + 1;
@@ -611,11 +614,11 @@ var self = leto.array =
         {
             if (leto.type(item) != 'array' || item.length != l)
             {
-                throw 'Array.transpose needs a correct elements format right now!';
+                throw 'Array.transpose needs a correct elements format!';
                 return false;
             }
         });
-        return self.zip.apply(array[0], array.slice(1));
+        return self.zip.apply(null, array);
     },
 
     //--------------------------------------------------------------------------
@@ -676,7 +679,7 @@ var self = leto.array =
         return self.map(array, function(elem, index)
         {
             var sub = [elem];        
-            for (var i = 0; i < args.length; i++)
+            for (var i = 1; i < args.length; i++)
             {
                 sub.push(args[i][index]); 
             }

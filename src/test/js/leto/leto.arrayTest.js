@@ -1,188 +1,205 @@
 import leto.js
 import leto.array.js
 
+var A = leto.array;
+
 // assoc
-function testAssoc() {
-var s1 = [ "colors", "red", "blue", "green" ];
-var s2 = [ "letters", "a", "b", "c" ];
-var s3 = "foo";
-var a = [ s1, s2, s3 ];
-assertEquals(a.assoc("letters"), s2);
-assertUndefined(a.assoc("foo"));
-};
+function testAssoc()
+{
+    var s1 = ["colors","red","blue","green"];
+    var s2 = ["letters","a","b","c"];
+    var s3 = "foo";
+    var a = [s1,s2,s3 ];
+    assertEquals(s2, A.assoc(a, "letters"));
+    assertUndefined(A.assoc(a, "foo"));
+}
+
 // at
-function testAt() {
-var arr = ["a", "b", "c", "d"];
-assertEquals(arr.at(-1) , "d");
-assertEquals(arr.at(0) , "a");
-assertUndefined(arr.at(-100));
-assertUndefined(arr.at(100));
-};
-// clear
-function testClear() {
-var arr = ["a", "b", "c", "d"];
-assertEquals(arr.clear().length, 0);
-};
+function testAt()
+{
+    var a = ["a","b","c","d"];
+    assertEquals("d", A.at(a, -1));
+    assertEquals("a", A.at(a, 0));
+    assertUndefined(A.at(a, -100));
+    assertUndefined(A.at(a, 100));
+}
+
+// compact
+function testCompact()
+{
+    assertArrayEquals(["a","b","c"], A.compact(["a", null, "b", undefined, "c"]));
+}
+
 // each
-function testEach() {
-var arr = ["a", "b", "c", "d"];
-var rs = [];
-arr.each(function(item){
-    rs.push(item);         
-});
-assertTrue(ogre.equal(arr, rs));
-};
-// empty
-function testEmpty() {
-assertTrue([].empty());
-assertFalse([1].empty());
-};
+function testEach()
+{
+    var a = ["a","b","c","d"];
+    var rs = [];
+    A.each(a, function(item){ rs.push(item) });
+    assertArrayEquals(a, rs);
+}
+
 // fill
-function testFill() {
-var a1 = ["a", "b", "c", "d"]
-var a2 = ["a", "b", "c", "d"]
-var a3 = ["a", "b", "c", "d"]
-var a4 = ["a", "b", "c", "d"]
-var a5 = ["a", "b", "c", "d"]
-var a6 = ["a", "b", "c", "d"]
-var a7 = ["a", "b", "c", "d"]
-var s1 = ["x","x","x","x"];
-var s2 = ["x","t","t","t"];
-var s3 = ["a","b","z","z"];
-var s4 = ["z","z","z","d"];
-var s5 = ["a","b","c","d", undefined, undefined, "m","m"];
-var s6 = ["a","b","c","d", undefined, undefined, undefined];
-assertTrue(ogre.equal(a1.fill("x"), s1));
-assertTrue(ogre.equal(a1.fill("x", -100), s1));
-assertTrue(ogre.equal(a1.fill("t", 1), s2));
-assertTrue(ogre.equal(a2.fill("z", 2), s3));
-assertTrue(ogre.equal(a3.fill("z", 2, 2), s3));
-assertTrue(ogre.equal(a4.fill("z", -2), s3));
-assertTrue(ogre.equal(a5.fill("z", -6, 3), s4));
-assertTrue(ogre.equal(a6.fill("m", 6, 2), s5));
-assertTrue(ogre.equal(a7.fill("m", 6, 0), s6));
-};
+function testFill()
+{
+    var a1 = ["a","b","c","d"]
+    var a2 = ["a","b","c","d"]
+    var a3 = ["a","b","c","d"]
+    var a4 = ["a","b","c","d"]
+    var a5 = ["a","b","c","d"]
+    var a6 = ["a","b","c","d"]
+    var a7 = ["a","b","c","d"]
+    var s1 = ["x","x","x","x"];
+    var s2 = ["x","t","t","t"];
+    var s3 = ["a","b","z","z"];
+    var s4 = ["z","z","z","d"];
+    var s5 = ["a","b","c","d", undefined, undefined, "m","m"];
+    var s6 = ["a","b","c","d", undefined, undefined, undefined];
+    assertArrayEquals(s1, A.fill(a1, "x"));
+    assertArrayEquals(s1, A.fill(a1, "x", -100));
+    assertArrayEquals(s2, A.fill(a1, "t", 1));
+    assertArrayEquals(s3, A.fill(a2, "z", 2));
+    assertArrayEquals(s3, A.fill(a3, "z", 2, 2));
+    assertArrayEquals(s3, A.fill(a4, "z", -2));
+    assertArrayEquals(s4, A.fill(a5, "z", -6, 3));
+    assertArrayEquals(s5, A.fill(a6, "m", 6, 2));
+    assertArrayEquals(s6, A.fill(a7, "m", 6, 0));
+}
+
 // first
-function testFirst() {
-var a = [1,2,3,4,5];
-assertEquals(a.first(), 1);
-assertUndefined(a.first(-1));
-assertEquals(a.first(0).length, 0);
-assertTrue(ogre.equal(a.first(1), [1]));
-assertTrue(ogre.equal(a.first(2), [1,2]));
-assertTrue(ogre.equal(a.first(7), [1,2,3,4,5]));
-};
+function testFirst()
+{
+    var a = [1,2,3,4,5];
+    assertEquals(1, A.first(a));
+    assertUndefined(A.first(a, -1));
+    assertArrayEquals([], A.first(a, 0));
+    assertArrayEquals([1,2], A.first(a, 2));
+    assertArrayEquals([1,2,3,4,5], A.first(a, 7));
+}
+
 // flatten
-function testFlatten() {
-var a = [1,2,[3,[4,5]]];
-assertTrue(ogre.equal(a.flatten(), [1,2,3,4,5]));
-};
+function testFlatten()
+{
+    var a = [1,2,[3,[4,5]]];
+    assertArrayEquals([1,2,3,4,5], A.flatten(a));
+}
+
 // include
-function testInclude() {
-var a = [1,2,3,4];
-assertTrue(a.include(1));
-assertFalse(a.include(9));
-};
+function testInclude()
+{
+    var a = [1,2,3,4];
+    assert(A.include(a, 1));
+    assertFalse(A.include(a, 9));
+}
+
 // indexOf
-function testIndexOf() {
-var a = [1,2,3,4];
-assertEquals(a.indexOf(1), 0);
-assertEquals(a.indexOf(3), 2);
-assertEquals(a.indexOf(8), -1);
-};
+function testIndexOf()
+{
+    var a = [1,2,3,4];
+    assertEquals(0, A.indexOf(a, 1));
+    assertEquals(2, A.indexOf(a, 3));
+    assertEquals(-1, A.indexOf(a, 8));
+}
+
 // insert
-function testInsert() {
-var a = [1,2,3,4,5];
-assertTrue(ogre.equal(a.insert(2,99), [1,2,99,3,4,5]));
-assertTrue(ogre.equal(a.insert(-2,1,2,3), [1,2,99,3,4,1,2,3,5]));
-};
+function testInsert()
+{
+    var a = [1,2,3,4,5];
+    assertArrayEquals([1,2,99,3,4,5], A.insert(a, 2, 99));
+    assertArrayEquals([1,2,99,3,4,1,2,3,5], A.insert(a, -2, 1, 2, 3));
+}
+
 // last
-function testLast() {
-var a = [1,2,3,4,5];
-assertEquals(a.last(), 5);
-assertUndefined(a.first(-1));
-assertEquals(a.last(0).length, 0);
-assertTrue(ogre.equal(a.last(1), [5]));
-assertTrue(ogre.equal(a.last(2), [4,5]));
-assertTrue(ogre.equal(a.last(7), [1,2,3,4,5]));
-};
+function testLast()
+{
+    var a = [1,2,3,4,5];
+    assertEquals(5, A.last(a));
+    assertUndefined(A.last(a, -1));
+    assertArrayEquals([], A.last(a, 0));
+    assertArrayEquals([4,5], A.last(a, 2));
+    assertArrayEquals([1,2,3,4,5], A.last(a, 7));
+}
+
 // map
-function testMap() {
-var arr = ["a", "b", "c", "d"];
-var arr2 = arr.map(function(item) {
-    return item + '!';         
-});
-var arr3 = ["a!", "b!", "c!", "d!"];
-assertTrue(ogre.equal(arr2, arr3));
-};
+function testMap()
+{
+    var a = A.map(["a","b","c","d"], function(item) {
+        return item + '!';         
+    });
+    var a1 = ["a!","b!","c!","d!"];
+    assertArrayEquals(a1, a);
+}
+
 // rassoc
-function testRassoc() {
-        var a = [[1,"a"], [2,"b"], [3, "c"]];
-        assertTrue(ogre.equal(a.rassoc("c"), [3, "c"]));
-        assertUndefined(a.rassoc("z"));
-};
+function testRassoc()
+{
+    var a = [[1,"a"], [2,"b"], [3,"c"]];
+    assertArrayEquals([3,"c"], A.rassoc(a, "c"));
+    assertUndefined(A.rassoc(a, "z"));
+}
+
 // reject
-function testReject() {
-var a = [1,2,3,4,5];
-var b = a.reject(function(item){
-    return item > 4;         
-});
-assertEquals(b.length, 4);
-assertTrue(ogre.equal(b, [1,2,3,4]));
-};
+function testReject()
+{
+    var a = [1,2,3,4,5];
+    var b = A.reject(a, function(item){
+        return item > 4;         
+    });
+    assertArrayEquals([1,2,3,4], b);
+}
+
 // remove
-function testRemove() {
-        var a = [1,2,2,3,3,3,4,4,4,4];
-        var r1 = a.remove(1);
-        assertTrue(ogre.equal(r1, [1]));
-        assertTrue(ogre.equal(a,[2,2,3,3,3,4,4,4,4]));	
-        a.remove(2);
-        assertTrue(ogre.equal(a, [3,3,3,4,4,4,4]));
-        a.remove(8);
-        assertTrue(ogre.equal(a, [3,3,3,4,4,4,4]));
-        var r2 = a.remove(11);
-        assertTrue(ogre.equal(r2, []));
-        var r3 = a.remove(3,5);
-        assertTrue(ogre.equal(r3, [3]));
-};
+function testRemove()
+{
+    var a = [1,2,2,3,3,3,4,4,4,4];
+    var r1 = A.remove(a, 2);
+    assertArrayEquals([2], r1);
+    assertArrayEquals([1,3,3,3,4,4,4,4], a);
+    var r2 = A.remove(a, 3, 5);
+    assertArrayEquals([3], r2);
+    assertArrayEquals([1,4,4,4,4], a);
+}
+
 // select
-function testSelect() {
-var a = [1,2,3,4,5];
-var b = a.select(function(item){
-    return item > 4;         
-});
-assertEquals(b.length, 1);
-assertEquals(b[0], 5);
-};
+function testSelect()
+{
+    var a = A.select([1,2,3,4,5], function(item) { return item > 4 });
+    assertArrayEquals([5], a);
+}
+
 // split
-function testSplit() {
-        var a = [1,2,3,4,5];
-        assertTrue(ogre.equal(a.split(3), [[1,2],[4,5]]));
-        assertTrue(ogre.equal(a.split(function(item){
-                return item % 2 == 0;
-        }), [[1],[3],[5]]));
-        assertTrue(ogre.equal(a.split(function(item){
-                return item % 2 == 0;
-        }, 2), [[1],[3]]));
-        var a = [1,1,2,1,1];
-        assertTrue(ogre.equal(a.split(1), [[],[],[2],[],[]]));
-};
+function testSplit()
+{
+    var a = [1,2,3,4,5];
+    assertArrayEquals([[1,2],[4,5]], A.split(a, 3));
+    assertArrayEquals([[1],[3],[5]], A.split(a, function(item){
+            return item % 2 == 0;
+    }));
+
+    var a = [1,1,2,1,1];
+    assertArrayEquals([[],[],[2],[],[]], A.split(a, 1));
+}
+
 // transpose
-function testTranspose() {
-        var a = [[1,2],[3,4],[5,6]];
-        assertTrue(ogre.equal(a.transpose(), [[1,3,5],[2,4,6]]));
-};
+function testTranspose()
+{
+    var a = [[1,2],[3,4],[5,6]];
+    assertArrayEquals([[1,3,5],[2,4,6]], A.transpose(a));
+}
+
 // uniq
-function testUniq() {
-var a = [1,2,2,3,3,3,4,4,4,4];
-var b = a.uniq();
-assertTrue(ogre.equal(b, [1,2,3,4]));
-assertTrue(ogre.equal(b, b.uniq()));
-};
+function testUniq()
+{
+    var a = [1,2,2,3,3,3,4,4,4,4];
+    assertArrayEquals([1,2,3,4], A.uniq(a));
+    assertArrayEquals([1,2,3,4], A.uniq([1,2,3,4]));
+}
+
 // zip
-function testZip() {
+function testZip()
+{
     var a = [4,5,6];
     var b = [7,8,9];
-    assertTrue(ogre.equal([1,2,3].zip(a,b), [[1,4,7],[2,5,8],[3,6,9]]));
-    assertTrue(ogre.equal(a.zip([1,2], [8]), [[4,1,8],[5,2,undefined],[6,undefined, undefined]]));
-};
+    assertArrayEquals([[1,4,7],[2,5,8],[3,6,9]], A.zip([1,2,3], a, b));
+    assertArrayEquals([[4,1,8],[5,2,undefined],[6,undefined, undefined]], A.zip(a, [1,2], [8]));
+}
