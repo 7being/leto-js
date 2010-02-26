@@ -37,10 +37,10 @@
             </goals>
 	    <configuration>
 	      <browsers>
-                c:\program files\Internet Explorer\iexplore.exe
                 <!--
-                C:\Program Files\Mozilla Firefox\firefox.exe
+                c:\program files\Internet Explorer\iexplore.exe
                 -->
+                C:\Program Files\Mozilla Firefox\firefox.exe
 	      </browsers>
 	    </configuration>
           </execution>

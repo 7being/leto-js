@@ -25,7 +25,7 @@ function testSetObject()
     catch (e)
     {
         leto.setObject('letotest.b.c.d.e.f.g.h.i', 3);
-        assert(letotest.b.c.d.e.f.g.h.i === 3);
+        assertEquals(3, letotest.b.c.d.e.f.g.h.i);
         letotest = undefined
     }
 }
@@ -33,7 +33,7 @@ function testSetObject()
 function testGetObject()
 {
     letotest = {b: {c: {d: {e: {f: {g: {h: {i: 3 }}}}}}}};
-    assert(leto.getObject('letotest.b.c.d.e.f.g.h.i') === 3);
+    assertEquals(3, leto.getObject('letotest.b.c.d.e.f.g.h.i'));
     letotest = undefined
 }
 
@@ -50,7 +50,7 @@ function testEmptyFn()
     {
         fail("leto.emptyFn should have properties");
     }
-    assertObjectEquals(leto.emptyFn.prototype, {});
+    assertObjectEquals({}, leto.emptyFn.prototype);
     assertUndefined(leto.emptyFn());
 }
 
@@ -62,34 +62,34 @@ function testType()
     assertFalse(leto.type(null));
     //test number
     var c = 1, d = new Number(0);
-    assert(leto.type(1) === 'number');
-    assert(leto.type(new Number(0)) === 'number');
+    assertEquals('number', leto.type(1));
+    assertEquals('number', leto.type(new Number(0)));
     //test string
-    assert(leto.type('foo bar') === 'string');
-    assert(leto.type(new String('robot')) === 'string');
+    assertEquals('string', leto.type('foo bar'));
+    assertEquals('string', leto.type(new String('robot')));
     //test function
-    assert(leto.type(function(){}) === 'function');
-    assert(leto.type(new Function()) === 'function');
+    assertEquals('function', leto.type(function(){}));
+    assertEquals('function', leto.type(new Function()));
     //test boolean
-    assert(leto.type(true) === 'boolean');
-    assert(leto.type(new Boolean(false)) === 'boolean');
+    assertEquals('boolean', leto.type(true));
+    assertEquals('boolean', leto.type(new Boolean(false)));
     //test array
-    assert(leto.type([]) === 'array');
-    assert(leto.type(new Array) === 'array');
+    assertEquals('array', leto.type([]));
+    assertEquals('array', leto.type(new Array));
     //test object
-    assert(leto.type({}) === 'object');
-    assert(leto.type(new Object) === 'object');
+    assertEquals('object', leto.type({}));
+    assertEquals('object', leto.type(new Object));
     //test NaN
     //assertTrue(leto.type('abc'*3) === false);
     //test date
-    assert(leto.type(new Date) === 'date');
+    assertEquals('date', leto.type(new Date));
     //test arguments	
     //typeof(arguments) in opera is 'array' directly
-    //assertTrue(leto.type(arguments) === 'arguments');
+    //assertEquals('arguments', leto.type(arguments));
     //test element
-    assert(leto.type(document.getElementsByTagName("body")[0]) === 'element');
+    assertEquals('element', leto.type(document.getElementsByTagName("body")[0]));
     //test regexp
-    assert(leto.type(/^$/) === 'regexp');
+    assertEquals('regexp', leto.type(/^$/));
 }
 
 function testClone()
@@ -98,7 +98,7 @@ function testClone()
     var o2 = leto.clone(o1);
     //assert(leto.equal(o1,o2));
     assertObjectEquals(o1, o2)
-    assertFalse(o1 === o2);
+    assertNotEquals(o1, o2);
 }
 
 function testEqual()

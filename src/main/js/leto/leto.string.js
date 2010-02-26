@@ -4,11 +4,11 @@
 //========================================================================== 
 var self = leto.string =
 {
-	//==========================================================================
-	// PUBLIC METHODS
-	//========================================================================== 
+    //==========================================================================
+    // PUBLIC METHODS
+    //========================================================================== 
 	
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // BLANK
     //--------------------------------------------------------------------------
     /*
@@ -28,7 +28,7 @@ var self = leto.string =
         return !/\S/.test(string); 
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // CAPITALIZE
     //--------------------------------------------------------------------------
     /**
@@ -60,7 +60,7 @@ var self = leto.string =
         }
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // CASECMP
     //--------------------------------------------------------------------------
     /**
@@ -81,7 +81,7 @@ var self = leto.string =
             && string.toLowerCase() === other.toLowerCase();
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // CENTER
     //--------------------------------------------------------------------------
     /**
@@ -110,7 +110,7 @@ var self = leto.string =
         return string;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // CHOMP
     //--------------------------------------------------------------------------
     /**
@@ -147,7 +147,7 @@ var self = leto.string =
         }
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // CHOP
     //--------------------------------------------------------------------------
     /**
@@ -173,7 +173,7 @@ var self = leto.string =
                 string.slice(0, string.length-2) : string.slice(0, string.length-1);
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // COUNT
     //--------------------------------------------------------------------------
     /**
@@ -195,7 +195,7 @@ var self = leto.string =
      * leto.string.count(a, "ej-m")         #=> 4
      * </pre>
      */
-    count: function(string)
+    count: function(string, vargs)
     {
         var rs = _parseCharsetRules.apply(null, arguments);
         var inc = rs.inc, esc = rs.esc;
@@ -221,7 +221,7 @@ var self = leto.string =
         }
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // EACH
     //--------------------------------------------------------------------------
     /**
@@ -297,7 +297,7 @@ var self = leto.string =
         }
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // EACHCHAR
     //--------------------------------------------------------------------------
     /**
@@ -311,7 +311,7 @@ var self = leto.string =
         }
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // EMPTY
     //--------------------------------------------------------------------------
     /**
@@ -330,7 +330,7 @@ var self = leto.string =
         return !string.length;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // GSUB
     //--------------------------------------------------------------------------
     /**
@@ -370,7 +370,7 @@ var self = leto.string =
         return replacement.call(string, pattern);
     },
 	
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // INCLUDE
     //--------------------------------------------------------------------------
     /**
@@ -391,7 +391,7 @@ var self = leto.string =
         return string.indexOf(other) > -1;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // INSERT
     //--------------------------------------------------------------------------
     /**
@@ -431,8 +431,220 @@ var self = leto.string =
         }
         return string;
     },
+
+    //--------------------------------------------------------------------------
+    // LJUST
+    //--------------------------------------------------------------------------
+    /**
+     * If <i>width</i> is greater that the length of <i>str</i>, return a
+     * string of length <i>width</i> left justified and padded with <i>padstr</i>;
+     * otherwise returns <i>str</i>
+     *
+     * @param	{Number} width - The desired length of string.
+     * @param	{String} padstr='&nbsp;' - (optional) The str to padded the original string, default space.
+     * @return	{String} The ljusted string.
+     *
+     * @example
+     * <pre>
+     * leto.string.ljust("hello", 4)		#=> "hello"
+     * leto.string.ljust("hello", 20)		#=> "hello               "
+     * leto.string.ljust("hello", 20, '1234')	#=> "hello123412341234123"
+     * </pre>
+     */
+    ljust: function(string, width, padstr)
+    {
+        var gt = width - string.length;
+        if (gt > 0)
+        {
+            padstr = padstr || ' ';
+            var p = padstr.length;
+            var sb = [string];
+            while (gt > p)
+            {
+                sb.push(padstr);
+                gt -= p;
+            }
+            sb.push(padstr.slice(0, gt));
+            return sb.join('');
+        }
+        return string;
+    },
+
+    //--------------------------------------------------------------------------
+    // LSTRIP
+    //--------------------------------------------------------------------------
+    /**
+     * Returns a copy of <i>str</i> with leading whitespaces removed.
+     * See also {@link leto.string.rstrip} and {@link leto.string.strip}
+     *
+     * @return	{String} The lstriped string.
+     *
+     * @example
+     * <pre>
+     * leto.string.lstrip("    hello    ")  #=> "    hello"
+     * </pre>
+     */
+    lstrip: function(string)
+    {
+        return string.replace(/^\s\s*/, '');	
+    },
+
+    //--------------------------------------------------------------------------
+    // REMOVE
+    //--------------------------------------------------------------------------
+    /**
+     * Returns a copy of str with all characters in the intersection 
+     * of its arguments removed. Uses the same rules for building 
+     * the set of characters as {@link leto.string#count}. 
+     *
+     * @param   {Varargs} [other_str]+ - Any number of strings.
+     * @return  {String} The specific chars removed string.
+     *
+     * @example
+     * <pre>
+     * "hello".remove("l", "lo")		#=> "heo"
+     * "hello".remove("lo")			#=> "he"
+     * "hello".remove("aeiou", "^e")	    #=> "hell"
+     * "hello".remove("ej-m")			#=> "ho"
+     * </pre>
+     */
+    remove: function(string, varargs)
+    {
+        var rs = _parseCharsetRules.apply(null, arguments);
+        var inc = rs.inc, esc = rs.esc;
+        if (inc.length)
+        {
+            var sb = []; 
+            for (var i = 0, l = string.length; i < l; i++)
+            {
+                if (inc.include(string.charAt(i)))
+                {
+                    continue;
+                }
+                sb.push(string.charAt(i));
+            }
+            return sb.join('');
+        }
+        else
+        {
+            if (esc.length)
+            {
+                var sb = []; 
+                for (var i = 0, l = string.length; i < l; i++)
+                {
+                    if (esc.include(string.charAt(i)))
+                    {
+                        sb.push(string.charAt(i));
+                    }
+                }
+                return sb.join('');
+            }
+            else
+            {
+                return string;
+            }
+        }
+    },
     
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // RESCAPE
+    //--------------------------------------------------------------------------
+    /**
+     * Escapes all regular expression character from the <i>str</i>
+     *
+     * @return	{String} A RegExp chars escaped string.
+     *
+     * @example
+     * <pre>
+     * leto.string.rescape("a.b[100]")	#=> "a\\.b\\[100\\]"
+     * </pre>
+     */
+    rescape: function(string)
+    {
+        return string.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1');
+    },
+
+    //--------------------------------------------------------------------------
+    // REVERSE
+    //--------------------------------------------------------------------------
+    /**
+     * Reverses a copy of <i>str</i> and return.
+     *
+     * @return	{String} The reversed string.
+     *
+     * @example
+     * <pre>
+     * leto.string.reverse("hello world")   #=> "dlrow olleh"
+     * </pre>
+     */
+    reverse: function(string)
+    {
+        var sb = [];	
+        for (var i = string.length - 1; i >= 0; i--)
+        {
+            sb.push(string.charAt(i));
+        }
+        return sb.join('');
+    },
+    
+    //--------------------------------------------------------------------------
+    // RJUST
+    //--------------------------------------------------------------------------
+    /**
+     * If <i>width</i> is greater that the length of <i>str</i>, return a
+     * string of length <i>width</i> right justified and padded with <i>padstr</i>;
+     * otherwise returns <i>str</i>
+     *
+     * @param	{Number} width - The desired length of string.
+     * @param	{String} padstr='&nbsp;' - (optional) The str to padded the original string, default space.
+     * @return	{String} The rjusted string.
+     *
+     * @example
+     * <pre>
+     * leto.string.rjust("hello", 4)		#=> "hello"
+     * leto.string.rjust("hello", 20)		#=> "               hello"
+     * leto.string.rjust("hello", 20, '1234')	#=> "123412341234123hello"
+     * </pre>
+     */
+    rjust: function(string, width, padstr)
+    {
+        var gt = width - string.length;
+        if (gt > 0)
+        {
+            padstr = padstr || ' ';
+            var p = padstr.length;
+            var sb = [];
+            while (gt > p)
+            {
+                sb.push(padstr);
+                gt -= p;
+            }
+            sb.push(padstr.slice(0, gt), string);
+            return sb.join('');
+        }
+        return string;
+    },
+
+    //--------------------------------------------------------------------------
+    // RSTRIP
+    //--------------------------------------------------------------------------
+    /**
+     * Returns a copy of <i>str</i> with trailing whitespaces removed.
+     * See also {@link leto.string#lstrip} and {@link leto.string#strip}
+     *
+     * @return	{String} The rstriped string.
+     *
+     * @example
+     * <pre>
+     * leto.string.rstrip("    hello   ")   #=> "    hello"
+     * </pre>
+     */
+    rstrip: function(string)
+    {
+        return string.replace(/\s\s*$/, '');	
+    },
+
+    //--------------------------------------------------------------------------
     // SCAN
     //--------------------------------------------------------------------------
     /**
@@ -484,11 +696,11 @@ var self = leto.string =
                 rs.push(m);
             };
         }
-        string.gsub(pattern, cb);
+        self.gsub(string, pattern, cb);
         if (rs) return rs;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // SQUEEZE
     //--------------------------------------------------------------------------
     /**
@@ -562,7 +774,7 @@ var self = leto.string =
         return sb.join('');
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // SQUISH
     //--------------------------------------------------------------------------
     /**
@@ -582,8 +794,28 @@ var self = leto.string =
     {
         return self.strip(string).replace(/\s\s\s*/g, ' ');
     },
+    
+    //--------------------------------------------------------------------------
+    // STRIP
+    //--------------------------------------------------------------------------
+    /**
+     * Returns a copy of <i>str</i> with leading and trailing whitespace 
+     * removed.
+     *
+     * @return	{String} The striped string.
+     *
+     * @example
+     * <pre>
+     * leto.string.strip("    hello   ")    #=> "hello"
+     * leto.string.strip("\tgoodby\r\n")    #=> "goodbye"
+     * </pre>
+     */
+    strip: function(string)
+    {
+        return self.rstrip(self.lstrip(string));
+    },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // SUB
     //--------------------------------------------------------------------------
     /**
@@ -611,7 +843,7 @@ var self = leto.string =
         return replacement.call(string, pattern);	
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // SUCC
     //--------------------------------------------------------------------------
     /**
@@ -703,7 +935,7 @@ var self = leto.string =
         }
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // SWAPCASE
     //--------------------------------------------------------------------------
     /**
@@ -726,245 +958,13 @@ var self = leto.string =
         });
     },
 
-	//--------------------------------------------------------------------------
-    // LJUST
     //--------------------------------------------------------------------------
-    /**
-     * If <i>width</i> is greater that the length of <i>str</i>, return a
-     * string of length <i>width</i> left justified and padded with <i>padstr</i>;
-     * otherwise returns <i>str</i>
-     *
-     * @param	{Number} width - The desired length of string.
-     * @param	{String} padstr='&nbsp;' - (optional) The str to padded the original string, default space.
-     * @return	{String} The ljusted string.
-     *
-     * @example
-     * <pre>
-     * leto.string.ljust("hello", 4)		#=> "hello"
-     * leto.string.ljust("hello", 20)		#=> "hello               "
-     * leto.string.ljust("hello", 20, '1234')	#=> "hello123412341234123"
-     * </pre>
-     */
-    ljust: function(string, width, padstr)
-    {
-        var gt = width - string.length;
-        if (gt > 0)
-        {
-            padstr = padstr || ' ';
-            var p = padstr.length;
-            var sb = [string];
-            while (gt > p)
-            {
-                sb.push(padstr);
-                gt -= p;
-            }
-            sb.push(padstr.slice(0, gt));
-            return sb.join('');
-        }
-        return string;
-    },
-
-	//--------------------------------------------------------------------------
-    // RJUST
-    //--------------------------------------------------------------------------
-    /**
-     * If <i>width</i> is greater that the length of <i>str</i>, return a
-     * string of length <i>width</i> right justified and padded with <i>padstr</i>;
-     * otherwise returns <i>str</i>
-     *
-     * @param	{Number} width - The desired length of string.
-     * @param	{String} padstr='&nbsp;' - (optional) The str to padded the original string, default space.
-     * @return	{String} The rjusted string.
-     *
-     * @example
-     * <pre>
-     * leto.string.rjust("hello", 4)		#=> "hello"
-     * leto.string.rjust("hello", 20)		#=> "               hello"
-     * leto.string.rjust("hello", 20, '1234')	#=> "123412341234123hello"
-     * </pre>
-     */
-    rjust: function(string, width, padstr)
-    {
-        var gt = width - string.length;
-        if (gt > 0)
-        {
-            padstr = padstr || ' ';
-            var p = padstr.length;
-            var sb = [];
-            while (gt > p)
-            {
-                sb.push(padstr);
-                gt -= p;
-            }
-            sb.push(padstr.slice(0, gt), string);
-            return sb.join('');
-        }
-        return string;
-    },
-
-	//--------------------------------------------------------------------------
-    // REMOVE
-    //--------------------------------------------------------------------------
-    /**
-     * Returns a copy of str with all characters in the intersection 
-     * of its arguments removed. Uses the same rules for building 
-     * the set of characters as {@link leto.string#count}. 
-     *
-     * @param   {Varargs} [other_str]+ - Any number of strings.
-     * @return  {String} The specific chars removed string.
-     *
-     * @example
-     * <pre>
-     * "hello".remove("l", "lo")		#=> "heo"
-     * "hello".remove("lo")			#=> "he"
-     * "hello".remove("aeiou", "^e")	    #=> "hell"
-     * "hello".remove("ej-m")			#=> "ho"
-     * </pre>
-     */
-    remove: function(string, varargs)
-    {
-        var rs = _parseCharsetRules.apply(null, arguments);
-        var inc = rs.inc, esc = rs.esc;
-        if (inc.length)
-        {
-            var sb = []; 
-            for (var i = 0, l = string.length; i < l; i++)
-            {
-                if (inc.include(string.charAt(i)))
-                {
-                    continue;
-                }
-                sb.push(string.charAt(i));
-            }
-            return sb.join('');
-        }
-        else
-        {
-            if (esc.length)
-            {
-                var sb = []; 
-                for (var i = 0, l = string.length; i < l; i++)
-                {
-                    if (esc.include(string.charAt(i)))
-                    {
-                        sb.push(string.charAt(i));
-                    }
-                }
-                return sb.join('');
-            }
-            else
-            {
-                return string;
-            }
-        }
-    },
-	
-	//--------------------------------------------------------------------------
-    // STRIP
-    //--------------------------------------------------------------------------
-    /**
-     * Returns a copy of <i>str</i> with leading and trailing whitespace 
-     * removed.
-     *
-     * @return	{String} The striped string.
-     *
-     * @example
-     * <pre>
-     * leto.string.strip("    hello   ")    #=> "hello"
-     * leto.string.strip("\tgoodby\r\n")    #=> "goodbye"
-     * </pre>
-     */
-    strip: function(string)
-    {
-        return self.rstrip(self.lstrip(string));
-    },
-
-	//--------------------------------------------------------------------------
-    // LSTRIP
-    //--------------------------------------------------------------------------
-    /**
-     * Returns a copy of <i>str</i> with leading whitespaces removed.
-     * See also {@link leto.string.rstrip} and {@link leto.string.strip}
-     *
-     * @return	{String} The lstriped string.
-     *
-     * @example
-     * <pre>
-     * leto.string.lstrip("    hello    ")  #=> "    hello"
-     * </pre>
-     */
-    lstrip: function(string)
-    {
-        return string.replace(/^\s\s*/, '');	
-    },
-
-	//--------------------------------------------------------------------------
-    // REVERSE
-    //--------------------------------------------------------------------------
-    /**
-     * Reverses a copy of <i>str</i> and return.
-     *
-     * @return	{String} The reversed string.
-     *
-     * @example
-     * <pre>
-     * leto.string.reverse("hello world")   #=> "dlrow olleh"
-     * </pre>
-     */
-    reverse: function(string)
-    {
-        var sb = [];	
-        for (var i = string.length - 1; i >= 0; i--)
-        {
-            sb.push(string.charAt(i));
-        }
-        return sb.join('');
-    },
-
-	//--------------------------------------------------------------------------
-    // RSTRIP
-    //--------------------------------------------------------------------------
-    /**
-     * Returns a copy of <i>str</i> with trailing whitespaces removed.
-     * See also {@link leto.string#lstrip} and {@link leto.string#strip}
-     *
-     * @return	{String} The rstriped string.
-     *
-     * @example
-     * <pre>
-     * leto.string.rstrip("    hello   ")   #=> "    hello"
-     * </pre>
-     */
-    rstrip: function(string)
-    {
-        return string.replace(/\s\s*$/, '');	
-    },
-
-	//--------------------------------------------------------------------------
-    // RESCAPE
-    //--------------------------------------------------------------------------
-    /**
-     * Escapes all regular expression character from the <i>str</i>
-     *
-     * @return	{String} A RegExp chars escaped string.
-     *
-     * @example
-     * <pre>
-     * leto.string.rescape("a.b[100]")	#=> "a\\.b\\[100\\]"
-     * </pre>
-     */
-    rescape: function(string)
-    {
-        return string.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1');
-    },
-
-	//--------------------------------------------------------------------------
     // FORMAT
     //--------------------------------------------------------------------------
     /**
      *
      */
-    format: function(string)
+    format: function(string, vargs)
     {
         var args = Array.prototype.slice.call(arguments, 1);
         return string.replace(/\{(\d+)\}/g, function(m, i)
@@ -973,7 +973,7 @@ var self = leto.string =
         });
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // TO QUERY PARAMS
     //--------------------------------------------------------------------------
     /**
@@ -1007,8 +1007,10 @@ var self = leto.string =
     toQueryParams: function(string)
     {
         var obj = {};
-        string.split('&').each(function(pair)
+        var pairs = string.split('&');
+        for (var i = 0; i < pairs.length; i++)
         {
+            var pair = pairs[i];
             var tokens = pair.split('=');
             if(tokens.length > 1 && tokens[1])
             {
@@ -1026,11 +1028,11 @@ var self = leto.string =
                     obj[key] = decodeURIComponent(val);
                 }
             }
-        });
+        }
         return obj;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // TRUNCATE
     //--------------------------------------------------------------------------
     /**
@@ -1050,11 +1052,12 @@ var self = leto.string =
     truncate: function(string, length, /*default='...'*/suffix)
     {
         var suffix = suffix || '...';
+        var length = length || 30;
         return string.length > length ?
             string.slice(0, length - suffix.length) + suffix : string;
     },
 
-	//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // UPTO
     //--------------------------------------------------------------------------
     /**
@@ -1107,7 +1110,7 @@ var self = leto.string =
 		if (t == 'string')
 		{
 			var f = global ? 'g' : '';
-			return new RegExp(pattern.rescape(), f);
+			return new RegExp(self.rescape(pattern), f);
 		}
 		if (t == 'regexp')
 		{
@@ -1173,7 +1176,7 @@ var self = leto.string =
 		for (var i = 0; i < args.length; i++)
 		{
 			// parse sequence
-			var item = args[i].gsub(/(\w)-(\w)/, function(m)
+			var item = self.gsub(args[i], /(\w)-(\w)/, function(m)
 			{
 				var tmp = [];    
 				m[1].upto(m[2], function(c) { tmp.push(c) });
