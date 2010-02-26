@@ -3,489 +3,121 @@ import leto.js
 function testNamespace()
 {
     try 
-	{
-        a.b.c.d.e.f.g.h.i;
-        fail("should be undefined before set namespace");
-    }
-	catch (e)
-	{
-        leto.namespace("a.b.c.d.e.f.g.h.i");
-        assertNotUndefined("should be defined after set namespace", a.b.c.d.e.f.g.h.i);
-    }
-}
-
-function testSetObject() {}
-
-function testGetObject() {}
-
-function testHasObject() {}
-
-function testEmptyFn() {}
-
-/*
-function testAssert() {
-    assert("true should be true", true);
-    assert(true);
-}
-
-function testAssertTrue() {
-    assertTrue("true should be true", true);
-    assertTrue(true);
-}
-
-function testAssertFalse() {
-    assertFalse("false should be false", false);
-    assertFalse(false);
-}
-
-function testAssertEquals() {
-    assertEquals("1 should equal 1", 1, 1);
-    assertEquals(1, 1);
-}
-
-function testAssertNotEquals() {
-    assertNotEquals("1 should not equal 2", 1, 2);
-    assertNotEquals(1, 2);
-}
-
-function testAssertNull() {
-    assertNull("null should be null", null);
-    assertNull(null);
-}
-
-function testAssertNotNull() {
-    assertNotNull("1 should not be null", 1);
-    assertNotNull(1);
-}
-
-function testAssertUndefined() {
-    var myVar;
-    assertUndefined("A declared but unassigned variable should have the undefined value", myVar);
-    assertUndefined(myVar);
-}
-
-function testAssertNotUndefined() {
-    assertNotUndefined("1 should not be undefined", 1);
-    assertNotUndefined(1);
-}
-
-function testAssertNaN() {
-    assertNaN("a string should not be a number", "string");
-    assertNaN("string");
-}
-
-function testAssertNotNaN() {
-    assertNotNaN("1 should not be not a number", 1);
-    assertNotNaN(1);
-}
-
-function testFail() {
-    var excep = null;
-    try {
-        fail("Failure message");
-    } catch (e) {
-        excep = e;
-    }
-    assertJsUnitFailure("fail(string) should throw a JsUnit.Exception", excep);
-}
-
-function testTooFewArguments() {
-    var excep = null;
-    try {
-        assert();
-    } catch (e1) {
-        excep = e1;
-    }
-    assertNonJsUnitFailure("Calling an assertion function with too few arguments should throw an exception", excep);
-}
-
-function testTooManyArguments() {
-    var exception = null;
-    try {
-        assertEquals("A comment", true, true, true);
-    } catch (e) {
-        exception = e;
-    }
-    assertNonJsUnitFailure("Calling an assertion function with too many arguments should throw an exception", exception);
-}
-
-function testInvalidCommentArgumentType() {
-    var excep = null;
-    try {
-        assertNull(1, true);
-    } catch (e3) {
-        excep = e3;
-    }
-    assertNonJsUnitFailure("Calling an assertion function with a non-string comment should throw an exception", excep);
-}
-
-function testInvalidArgumentType() {
-    var exception = null;
-    try {
-        assert("string");
-    } catch (e) {
-        exception = e;
-    }
-    assertNonJsUnitFailure("Calling an assertion function with an invalid argument should throw an exception", exception);
-}
-
-function testAssertArrayEquals() {
-    var array1 = Array();
-    array1[0] = "foo";
-    array1[1] = "bar";
-    array1[2] = "foobar";
-    var array2 = Array();
-    array2[0] = "foo";
-    array2[1] = "bar";
-    array2[2] = "foobar";
-    var array3 = Array();
-    array3[0] = "foo";
-    array3[1] = "bar";
-    var array4 = Array();
-    array4[0] = "bar";
-    array4[1] = "foo";
-    array4[2] = "foobar";
-
-    assertArrayEquals(array1, array1);
-    assertArrayEquals(array1, array2);
-    try {
-        assertArrayEquals(array1, array3);
-        fail("Should not be equal");
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.comment == "Call to fail()")
-            fail(e.comment + e.jsUnitMessage); //tried fail is also caught
-    }
-    try {
-        assertArrayEquals(array1, array4);
-        fail("Should not be equal");
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.comment == "Call to fail()")
-            fail(e.comment + e.jsUnitMessage); //tried fail is also caught
-    }
-    var array5 = ['foo', 'bar', ['nested', 'bar'], 'foobar'];
-    var array6 = ['foo', 'bar', ['nested', 'bar'], 'foobar'];
-    var array7 = ['foo', 'bar', ['nested', 'foo'], 'foobar'];
-    assertArrayEquals('Equal nested arrays', array5, array6);
-    try
     {
-        assertArrayEquals(array5, array7);
-        var failure = 'Differing nested arrays found to be equal';
-        fail(failure);
+        letotest.b.c.d.e.f.g.h.i;
+        fail("should be undefined");
     }
     catch (e)
     {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
+        leto.namespace("letotest.b.c.d.e.f.g.h.i");
+        assertNotUndefined(letotest.b.c.d.e.f.g.h.i);
+        letotest = undefined
     }
 }
 
-function testAssertObjectEquals_hash() {
-    var failure;
-    var hash1 = {foo:'bar'};
-    var hash2 = {foo:'bar'};
-    assertObjectEquals('Single object', hash1, hash1);
-    assertObjectEquals('Same objects', hash1, hash2);
-    var hash3 = {foo:'foo'};
-    var hash4 = {foo:'foo',
-        bar: function () {
-            this.foo = 'bar';
-            delete this.bar
-        }};
-    var hash5 = {foo:'foo',
-        bar: function () {
-            this.foo = 'foo';
-            delete this.bar
-        }};
-    try {
-        assertObjectEquals(hash1, hash3);
-        fail(failure = 'Simple differing objects found to be the same');
-    }
-    catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Failure", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
-    try {
-        assertObjectEquals(hash4, hash5);
-        fail(failure = 'Objects with different methods found to be the same');
-    }
-    catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
-
-    hash4.bar();
-    assertObjectEquals('Different objects, made to be the same', hash1, hash4);
-
-    try {
-        assertObjectEquals({ts:new Date()}, {ts:new Date()});
-        fail(failure = 'Objects with different Date attributes found to be the same');
-        var d1 = new Date(1);
-        var d2 = new Date(10000);
-        assertObjectEquals(d1, d2);
-        fail(failure = 'Different Date objects (' + d1 + ' and ' + d2 + ') found to be the same');
-    }
-    catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
-}
-function testAssertObjectEquals_date() {
-    var failure;
-    try
+function testSetObject()
+{
+    try 
     {
-        assertObjectEquals(new Date(), new Date());
-        fail(failure = 'Different Date objects found to be the same');
-        assertObjectEquals({ts:new Date(1)}, {ts:new Date(2)});
-        fail(failure = 'Objects with different Date attributes found to be the same');
+        letotest.b.c.d.e.f.g.h.i;
+        fail("should be undefined");
     }
     catch (e)
     {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
+        leto.setObject('letotest.b.c.d.e.f.g.h.i', 3);
+        assert(letotest.b.c.d.e.f.g.h.i === 3);
+        letotest = undefined
     }
 }
-function testAssertObjectEquals_regularExpression() {
-    assertObjectEquals(/a/, new RegExp('a'));
-    assertObjectEquals(/a/i, new RegExp('a', 'i'));
 
-    var failure;
-    try
+function testGetObject()
+{
+    letotest = {b: {c: {d: {e: {f: {g: {h: {i: 3 }}}}}}}};
+    assert(leto.getObject('letotest.b.c.d.e.f.g.h.i') === 3);
+    letotest = undefined
+}
+
+function testHasObject()
+{
+    letotest = {b: {c: {d: {e: {f: {g: {h: {i: 3 }}}}}}}};
+    assert(leto.hasObject('letotest.b.c.d.e.f.g.h.i'));
+    letotest = undefined
+}
+
+function testEmptyFn()
+{
+    for (var prop in leto.emptyFn)
     {
-        assertObjectEquals(/a/i, new RegExp('a', 'g'));
-        fail(failure = 'RegExp with different flags found to be the same');
+        fail("leto.emptyFn should have properties");
     }
-    catch (e)
-    {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
-    try
-    {
-        assertObjectEquals(/a/, new RegExp('b'));
-        fail(failure = 'RegExp with different patterns found to be the same');
-    }
-    catch (e)
-    {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
+    assertObjectEquals(leto.emptyFn.prototype, {});
+    assertUndefined(leto.emptyFn());
 }
 
-function testAssertObjectEquals_strings() {
-    var s1 = 'string1';
-    var s2 = 'string1';
-    var newS1 = new String('string1');
-    assertObjectEquals('Same Strings', s1, s2);
-    assertObjectEquals('Same Strings 1 with new', s1, newS1);
-
-    var failure;
-    try {
-        failure = "Different Strings, different length";
-        assertObjectEquals(failure, "foo", "fooXXX");
-        fail(failure);
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
-
-    try {
-        failure = "Different Strings, same length";
-        assertObjectEquals(failure, "foo", "bar");
-        fail(failure);
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
+// TODO test 'testnode' 'whitespace' 'nodeList'
+function testType()
+{
+    //test null undefined
+    assertFalse(leto.type());
+    assertFalse(leto.type(null));
+    //test number
+    var c = 1, d = new Number(0);
+    assert(leto.type(1) === 'number');
+    assert(leto.type(new Number(0)) === 'number');
+    //test string
+    assert(leto.type('foo bar') === 'string');
+    assert(leto.type(new String('robot')) === 'string');
+    //test function
+    assert(leto.type(function(){}) === 'function');
+    assert(leto.type(new Function()) === 'function');
+    //test boolean
+    assert(leto.type(true) === 'boolean');
+    assert(leto.type(new Boolean(false)) === 'boolean');
+    //test array
+    assert(leto.type([]) === 'array');
+    assert(leto.type(new Array) === 'array');
+    //test object
+    assert(leto.type({}) === 'object');
+    assert(leto.type(new Object) === 'object');
+    //test NaN
+    //assertTrue(leto.type('abc'*3) === false);
+    //test date
+    assert(leto.type(new Date) === 'date');
+    //test arguments	
+    //typeof(arguments) in opera is 'array' directly
+    //assertTrue(leto.type(arguments) === 'arguments');
+    //test element
+    assert(leto.type(document.getElementsByTagName("body")[0]) === 'element');
+    //test regexp
+    assert(leto.type(/^$/) === 'regexp');
 }
 
-function testAssertObjectEquals_numbers() {
-    var failure;
-    var n1 = 1;
-    var n2 = 1;
-    var newN1 = new Number(1);
-    assertObjectEquals('Same Numbers', n1, n2);
-    assertObjectEquals('Same Numbers 1 with new', n1, newN1);
-    var n3 = 2;
-    var newN3 = new Number(2);
-    try
-    {
-        assertObjectEquals(n1, n3);
-        fail(failure = 'Different Numbers');
-    }
-    catch (e)
-    {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
-    try
-    {
-        assertObjectEquals(newN1, newN3);
-        fail(failure = 'Different New Numbers');
-    }
-    catch (e)
-    {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
+function testClone()
+{
+    var o1 = {a:1,b:{a:1,b:2, c:{a:1,b:2,c:3}},c:3};
+    var o2 = leto.clone(o1);
+    //assert(leto.equal(o1,o2));
+    assertObjectEquals(o1, o2)
+    assertFalse(o1 === o2);
 }
 
-function testAssertObjectEquals_differentTypes() {
-    var failure;
-    try {
-        assertObjectEquals(1, "foo");
-        fail(failure = "different types");
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-    }
+function testEqual()
+{
+    var a1 = 1, a2 = 1;
+    assert(leto.equal(a1,a2));
+    var b1 = 1, b2 = '1';
+    assertFalse(leto.equal(b1,b2));
+    var c1 = 1, c2 = 0;
+    assertFalse(leto.equal(c1,c2));
+    var d1 = {a:1,b:{a:1,b:2, c:{a:1,b:2,c:3}},c:3};
+    var d2 = {b:{a:1,b:2, c:{a:1,b:2,c:3}},c:3,a:1};
+    var d3 = {a:1,b:2,c:4};
+    assert(leto.equal(d1,d2));
+    assertFalse(leto.equal(d2,d3));
+
+    assert(leto.equal('123', new String('123')));
+    assert(leto.equal(123, new Number(123)));
+
+    assert(leto.equal(["123", "abc"], ["123", "abc"]));
 }
 
-function testAssertObjectEquals_tooManyEntriesInActual() {
-    var failure;
-    try {
-        assertObjectEquals({a: "b"}, {a: "b", c: "d"});
-        fail(failure = "too many entries in actual");
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-        if (e.jsUnitMessage == failure)
-            fail(e.jsUnitMessage);
-
-        assertEquals("Expected keys \"a\" but found \"a, c\"", e.jsUnitMessage);
-    }
-}
-
-function testAssertEvaluatesToTrue() {
-    assertEvaluatesToTrue("foo");
-    assertEvaluatesToTrue(true);
-    assertEvaluatesToTrue(1);
-    try {
-        assertEvaluatesToTrue(null);
-        fail("Should have thrown a JsUnitException");
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-    }
-}
-
-function testAssertEvaluatesToFalse() {
-    assertEvaluatesToFalse("");
-    assertEvaluatesToFalse(null);
-    assertEvaluatesToFalse(false);
-    assertEvaluatesToFalse(0);
-    try {
-        assertEvaluatesToFalse("foo");
-        fail("Should have thrown a JsUnitException");
-    } catch (e) {
-        assertJsUnitFailure("Should be a JsUnit.Exception", e);
-    }
-}
-
-function testAssertHTMLEquals() {
-    assertHTMLEquals("<div id=mydiv>foobar</div>", "<div id='mydiv'>foobar</div>");
-    assertHTMLEquals("<p/>", "<p></p>");
-    assertHTMLEquals("foo bar", "foo bar");
-    assertHTMLEquals("a comment", "<p id='foo'>foo bar</p>", "<p id=foo>foo bar</p>");
-}
-
-function testAssertHashEquals() {
-    var hash1 = new Array();
-    hash1["key1"] = "value1";
-    hash1["key2"] = "value2";
-
-    var hash2 = new Array();
-    try {
-        assertHashEquals(hash1, hash2);
-        fail();
-    } catch (e) {
-        assertJsUnitFailure("hash2 is empty", e);
-    }
-    hash2["key1"] = "value1";
-    try {
-        assertHashEquals(hash1, hash2);
-        fail();
-    } catch (e) {
-        assertJsUnitFailure("hash2 is a of a different size", e);
-    }
-    hash2["key2"] = "foo";
-    try {
-        assertHashEquals(hash1, hash2);
-        fail();
-    } catch (e) {
-        assertJsUnitFailure("hash2 has different values", e);
-    }
-    hash2["key2"] = "value2";
-    assertHashEquals(hash1, hash2);
-}
-
-function testAssertRoughlyEquals() {
-    assertRoughlyEquals(1, 1.1, 0.5);
-    assertRoughlyEquals(1, 5, 6);
-    assertRoughlyEquals(-4, -5, 2);
-    assertRoughlyEquals(-0.5, 0.1, 0.7);
-    try {
-        assertRoughlyEquals(1, 2, 0.5);
-    } catch (e) {
-        assertJsUnitFailure("1 and 2 are more than 0.5 apart", e);
-    }
-}
-
-function testAssertContains() {
-    assertContains("foo", "foobar");
-    assertContains("ooba", "foobar");
-    assertContains("bar", "foobar");
-}
-
-function testAssertEqualsIgnoringOrder() {
-    try {
-        assertEqualsIgnoringOrder("a", ["b", "c"]);
-        fail();
-    } catch (e) {
-        assertJsUnitFailure("both args should be arrays", e);
-        assertEquals("Expected arguments <a> (String) and <b,c> (Array) to be arrays", e.jsUnitMessage);
-    }
-
-    assertEqualsIgnoringOrder(["a", "b"], ["a", "b"]);
-    assertEqualsIgnoringOrder(["a", "b"], ["b", "a"]);
-
-    try {
-        assertEqualsIgnoringOrder(["a"], ["b"]);
-        fail();
-    } catch (e) {
-        assertJsUnitFailure("arrays are different", e);
-        assertEquals("Expected arrays <a> (Array) and <b> (Array) to be equal (ignoring order)", e.jsUnitMessage);
-    }
-
-    try {
-        assertEqualsIgnoringOrder(["a", "b", "c"], ["b", "c", "d"]);
-        fail();
-    } catch (e) {
-        assertJsUnitFailure("arrays are different", e);
-        assertEquals("Expected arrays <a,b,c> (Array) and <b,c,d> (Array) to be equal (ignoring order)", e.jsUnitMessage);
-    }
-}
-
-function assertJsUnitFailure(comment, allegedJsUnitFailure) {
-    assertNotNull(comment, allegedJsUnitFailure);
-    assert(comment, allegedJsUnitFailure.isJsUnitFailure);
-    assertNotUndefined(comment, allegedJsUnitFailure.comment);
-}
-
-function assertNonJsUnitFailure(comment, allegedNonJsUnitFailure) {
-    assertNotNull(comment, allegedNonJsUnitFailure);
-    assertUndefined(comment, allegedNonJsUnitFailure.isJsUnitFailure);
-    assertNotUndefined(comment, allegedNonJsUnitFailure.description);
-}
-*/
