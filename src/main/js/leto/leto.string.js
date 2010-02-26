@@ -1171,46 +1171,49 @@ var self = leto.string =
 	 */
 	function _parseCharsetRules()
 	{
-		var inc = [], esc = [];
-		var args = Array.prototype.slice.call(arguments, 1);
-		for (var i = 0; i < args.length; i++)
-		{
-			// parse sequence
-			var item = self.gsub(args[i], /(\w)-(\w)/, function(m)
-			{
-				var tmp = [];    
-				m[1].upto(m[2], function(c) { tmp.push(c) });
-				return tmp.join('');
-			});
+            var inc = [], esc = [];
+            var args = Array.prototype.slice.call(arguments, 1);
+            for (var i = 0; i < args.length; i++)
+            {
+                // parse sequence
+                var item = self.gsub(args[i], /(\w)-(\w)/, function(m)
+                {
+                    var tmp = [];    
+                    m[1].upto(m[2], function(c) { tmp.push(c) });
+                    return tmp.join('');
+                });
 
-			var tmp = item.split('');
-			// parse negated
-			if (tmp[0] == '^')
-			{
-				tmp.shift();
-				esc = esc.concat(tmp);
-			}
-			else
-			{
-				// parse intersection
-				if (inc.length)
-				{
-					inc = inc.select(function(c) { return tmp.include(c) }).uniq();
-				}
-				else
-				{
-					inc = tmp.uniq();
-				} 
-			}
-		}
+                var tmp = item.split('');
+                // parse negated
+                if (tmp[0] == '^')
+                {
+                    tmp.shift();
+                    esc = esc.concat(tmp);
+                }
+                else
+                {
+                    // parse intersection
+                    if (inc.length)
+                    {
+                        inc = leto.array.uniq(leto.array.select(inc, 
+                            function(c){ return leto.array.include(tmp, c) }));
+                    }
+                    else
+                    {
+                        inc = leto.array.uniq(tmp);
+                    } 
+                }
+            }
 
-		esc = esc.uniq();
-		if (inc.length)
-		{
-			inc.remove.apply(inc, esc);
-			esc.clear();
-		}
-		return {'inc': inc, 'esc': esc};
+            esc = leto.array.uniq(esc);
+            if (inc.length)
+            {
+                var a = esc;
+                a.shift(inc);
+                leto.array.remove.apply(null, a);
+                esc.length = 0;
+            }
+            return {'inc': inc, 'esc': esc};
 	}
 
 })();
