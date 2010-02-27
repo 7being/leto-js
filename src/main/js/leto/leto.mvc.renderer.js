@@ -19,96 +19,51 @@ var self = leto.mvc.renderer =
     //==========================================================================
 
     //--------------------------------------------------------------------------
-    // JST RENDER
+    // REGISTER
+    //--------------------------------------------------------------------------
+    register: function(name, view)
+    {
+       _table[name] = (typeof view == 'function') ?  new view : view; 
+    },
+
+    //--------------------------------------------------------------------------
+    // RENDER
+    //--------------------------------------------------------------------------
+    render: function(viewName, render, params)
+    {
+        var args = Array.prototype.slice.call(arguments, 2);
+        var view = _table[viewName];
+        var method = 'render' + render.charAt(0).toUpperCase() + render.slice(1);
+        if (!view[method])
+        {
+            throw method + ' not found in ' + viewName + ' view';
+        }
+        return view[method].apply(view, args);
+    },
+
+    //--------------------------------------------------------------------------
+    // RENDER JST 
     //--------------------------------------------------------------------------
     /**
      * @require TrimPath
      */
-    jstRender: function(template, data) 
+    renderJst: function(template, data) 
     {
-    	if (self.cache && !_templateCache[template]) 
+        var jst;
+        if (self.cache)
         {
-            //_templateCache[template] = TrimPath.parseDOMTemplate(template)
-            var templateObject = TrimPath.parseTemplate(template);
-    	}
-
-    	//var result = _templateCache[template].process(data);
-    	var result = templateObject.process(data);
-
-        return result;
-    },
-
-    //--------------------------------------------------------------------------
-    // JST URL RENDER
-    //--------------------------------------------------------------------------
-    stUrlRender: function(templateUrl, data) 
-    {
-        if (self.cache && !_templateCache[templateUrl])
+            var crc32 = leto.algo.crc32(template);
+            jst = _cache[crc32] = _cache[crc32] || _parseJstTemplate(template);
+        }
+        else
         {
-            var template = _fetch(templateUrl);
-            _templateCache[templateUrl] = _jstParser(template);
+            jst = _parseJstTemplate(template);
         }
 
-        var jstObject = _templateCache[templateUrl];
-        var result = jstObject.process(data);
-
+    	var result = jst.process(data);
         return result;
     },
 
-    //--------------------------------------------------------------------------
-    // XSLT RENDER
-    //--------------------------------------------------------------------------
-    /**
-     * @require Sarissa
-     */
-    xsltRender: function(template, data) 
-    {
-        var xsl = _xslParser(template);
-        var result = _xslTransform(xsl, data);
-
-        return result;
-    },
-
-    //--------------------------------------------------------------------------
-    // XSLT URL RENDER
-    //--------------------------------------------------------------------------
-    xsltUrlRender: function(templateUrl, data)
-    {
-        if (self.cache && !_templateCache[templateUrl])
-        {
-            var template = _fetch(templateUrl);
-            _templateCache[templateUrl] = _xslParser(template);
-        }
-
-        var xsl = _templateCache[templateUrl];
-        var result = _xslTransform(xsl, data);
-
-        return result;
-    },
-
-    //--------------------------------------------------------------------------
-    // EJS RENDER
-    //--------------------------------------------------------------------------
-    /**
-     * @require EJS
-     */
-    ejsRender: function(template, data) 
-    {
-        var ejs = new EJS({ text: template });
-        var result = ejs.render(data);
-
-        return result; 
-    },
-
-    //--------------------------------------------------------------------------
-    // EJS URL RENDER
-    //--------------------------------------------------------------------------
-    ejsUrlRender: function(templateUrl, data)
-    {
-        var template = _fetch(templateUrl);
-        return that.ejsRender(template, data);
-    },
-    
     //--------------------------------------------------------------------------
     // REPLACE WITH
     //--------------------------------------------------------------------------
@@ -134,12 +89,14 @@ var self = leto.mvc.renderer =
     }
 }; 
 
-	//==========================================================================
+    //==========================================================================
     // PRIVATE MEMBERS
     //==========================================================================
-	var _templateCache = {};
+
+    var _table = {};
+    var _cache = {};
 	
-	//==========================================================================
+    //==========================================================================
     // PRIVATE METHODS
     //==========================================================================
 	
@@ -183,47 +140,23 @@ var self = leto.mvc.renderer =
     //--------------------------------------------------------------------------
     // JST PARSE JST
     //--------------------------------------------------------------------------
-    var _jstParser = function(template) 
+    var _parseJstTemplate = function(template) 
     {
-        var jst = TrimPath.parseTemplate(template);
-
+        var jst;
+        if (document.getElementById(template))
+        {
+            jst = TrimPath.parseDOMTemplate(template);
+        }
+        else if (/\.jst$/.test(template))
+        {
+            jst = TrimPath.parseTemplate(_fetch(template));
+        }
+        else
+        {
+            jst = TrimPath.parseTemplate(template);
+        }
         return jst;
     };
-
-    //--------------------------------------------------------------------------
-    // XSL PARSE
-    //--------------------------------------------------------------------------
-    var _xslParser = function(template)
-    {
-        var xsl = (new DOMParser()).parseFromString(template, "text/xml");
-        if (Sarissa.getParseErrorText(xsl) != Sarissa.PARSED_OK)
-        {
-            alert(Sarissa.getParseErrorText(xsl));
-        } 
-
-        return xsl;
-    };
-
-    //--------------------------------------------------------------------------
-    // XSL TRANSFORM
-    //--------------------------------------------------------------------------
-    var _xslTransform = function(xslDoc, xmlData) 
-    {
-        var xmlDoc = (new DOMParser()).parseFromString(xmlData, "text/xml");
-        if (Sarissa.getParseErrorText(xmlDoc) != Sarissa.PARSED_OK)
-        {
-            alert(Sarissa.getParseErrorText(xmlDoc));
-        }
-
-        var xslt = new XSLTProcessor();
-        xslt.importStylesheet(xslDoc);
-
-        var output = xslt.transformToDocument(xmlDoc);
-        var result = (new XMLSerializer()).serializeToString(output);
-
-        return result; 
-    };
-	
 
 })();
 

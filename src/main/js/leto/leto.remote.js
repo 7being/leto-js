@@ -1,4 +1,4 @@
-﻿(function($) {
+(function($) {
 //==========================================================================
 // REMOTE
 //========================================================================== 
@@ -74,7 +74,7 @@ leto.remote =
     }
 };
 
-function _substitute(template, params)
+var _substitute = function(template, params)
 {
     var fnbody = template.replace(/@(\w+)@/g, function(m, key)
     {
@@ -87,8 +87,11 @@ function _substitute(template, params)
             case 'success':
             case 'failure':
             case 'complete':
-                // fix this reference in $.ajax callbacks
-                if (value) value = value.replace(/\$\(this\)/g, '$(_self_)');
+            // fix this reference in $.ajax callbacks
+            if (value)
+            {
+                value = value.replace(/\$\(this\)/g, '$(_self_)');
+            } 
         }
 
         // deal with where to put the response
@@ -112,7 +115,10 @@ function _substitute(template, params)
             }
 
             // append $() constructor if user didn't provided
-            if(!/\$\(.+\)/.test(value)) value = '$("' + value + '")';
+            if(!/\$\(.+\)/.test(value))
+            {
+                value = '$("' + value + '")';
+            }
             // insert/replace html with proper jquery method
             value += '.' + fn + '(data)';
         }
@@ -133,16 +139,14 @@ function _substitute(template, params)
             case 'data':
                 // TODO serialize if is hash
         }        
-
         return value || 'null';
     });
     // create a function on the fly
     return new Function(fnbody);
-}
+};
 
 
 var _DEBUG_ = false;
-
 if (_DEBUG_)
 {
     $.ajaxSetup(

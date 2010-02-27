@@ -26,6 +26,6 @@ var self = leto.mvc.Controller = function(className, controllerClass)
 
 leto.createController = self;
  
- })();
+})();
 
 //  EOF

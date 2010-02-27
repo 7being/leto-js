@@ -6,7 +6,7 @@
 
   <groupId>net.ileto</groupId>
   <artifactId>leto-js</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Leto Javascript</name>
@@ -15,19 +15,45 @@
   <build>
     <resources>
       <resource>
-        <directory>src/main/js</directory>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**</exclude>
+        </excludes>
       </resource>
     </resources>
-    <testResources>
-      <testResource>
-        <directory>src/test/js</directory>
-      </testResource>
-    </testResources>
     <plugins>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>target/classes/js</outputDirectory>
+                <resources>          
+                  <resource>
+                    <directory>src/main/js</directory>
+                    <includes>
+                      <include>leto/**</include>
+                    </includes>
+                  </resource>
+                  <resource>
+                    <directory>src/main/js/lib</directory>
+                    <includes>
+                      <include>jquery-1.4.2.min.js</include>
+                    </includes>
+                  </resource>
+                </resources>              
+              </configuration>            
+            </execution>
+          </executions>
+      </plugin>
       <plugin>
         <groupId>net.ileto.maven</groupId>
         <artifactId>maven-jstools-plugin</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
         <executions>
           <execution>
             <id>jsunit</id>
@@ -43,6 +69,30 @@
                 C:\Program Files\Mozilla Firefox\firefox.exe
 	      </browsers>
               <port>8888</port>
+              <skip>true</skip>
+	    </configuration>
+          </execution>
+          <execution>
+            <id>compress</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>compress</goal>
+            </goals>
+	    <configuration>
+              <name>leto</name>
+              <version>0.0.1</version>
+              <outputDirectory>target/classes/js</outputDirectory>
+              <includes>
+                lib/trimpath-template-1.0.38.js,
+                leto/leto.js,
+                leto/leto.array.js,
+                leto/leto.string.js,
+                leto/leto.algo.js,
+                leto/leto.aop.js,
+                leto/leto.remote.js,
+                leto/leto.mvc.*.js,
+                leto/leto.shortcut.js
+              </includes>
 	    </configuration>
           </execution>
         </executions>

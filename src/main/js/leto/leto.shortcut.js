@@ -9,8 +9,8 @@ leto.h = leto.hash;
 leto.s = leto.string;
 
 // mvc
-execute = leto.mvc.dispatcher.execute;
-render = leto.mvc.dispatcher.render;
+action = leto.mvc.dispatcher.action;
+render = leto.mvc.renderer.render;
 params = leto.mvc.helper.params;
 expand = leto.mvc.helper.expand;
 

@@ -11,70 +11,39 @@ leto.mvc.dispatcher =
     //==========================================================================
 
     //--------------------------------------------------------------------------
-    // REGISTER CONTROLLER
+    // REGISTER
     //--------------------------------------------------------------------------
-    registerController: function(controlName, controlObj) 
+    register: function(name, controlObj) 
     {
-        if (_controlTable[controlName] && _controlTable[controlName] !== controlObj)
+        if (_table[name] && _table[name] !== controlObj)
         {
             throw "Found two different Controller trying to register as name: "
-                + controlName;
+                + name;
         }
-        _controlTable[controlName] = controlObj;
+        _table[name] = controlObj;
     },
 
     //--------------------------------------------------------------------------
-    // REGISTER VIEW
+    // ACTION
     //--------------------------------------------------------------------------
-    registerView: function(viewName, viewObj) 
-    {
-        if (_viewTable[controlName] && _viewTable[controlName] !== controlObj)
-        {
-            throw "Found two different View trying to register as name: "
-                + viewName;
-        }
-
-        _viewTable[viewName] = viewObj;
-    },
-
-    //--------------------------------------------------------------------------
-    // EXECUTE
-    //--------------------------------------------------------------------------
-    execute: function(controlName, action, params) 
+    action: function(controlName, action, params) 
     {
         var args = Array.prototype.slice.call(arguments, 2);
 
-        var control = _controlTable[controlName];
+        var control = _table[controlName];
         if (!control[action])
         {
             throw "Action " + action + " not found in " + controlName + " controller.";
         }
 
         return control[action].apply(control, args);
-    },
-
-    //--------------------------------------------------------------------------
-    // RENDER
-    //--------------------------------------------------------------------------
-    render: function(viewName, params) 
-    {
-        var args = Array.prototype.slice.call(arguments, 1);
-
-        var view = _viewTable[viewName];
-        if (!view)
-        {
-            throw "View " + viewName + " not found.";
-        }
-
-        return view.render.apply(view, args); 
     }
 };
 
     //==========================================================================
     // PRIVATE MEMBERS
     //==========================================================================
-    var _controlTable = {};
-    var _viewTable = {};
+    var _table = {};
 
 })();
 

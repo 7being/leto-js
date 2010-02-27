@@ -10,7 +10,7 @@ var self = leto.mvc.View = function(templatePath, viewClass)
 {
     $(document).ready(function()
     {
-        var dispatcher = leto.mvc.Dispatcher.getInstance();
+        var dispatcher = leto.mvc.dispatcher;
 
         // fix prototype
         viewClass.prototype.render = _getViewRender(templatePath);
@@ -39,28 +39,28 @@ var self = leto.mvc.View = function(templatePath, viewClass)
 
         return function()
         {
-            (this.preShow || Leto.emptyFn).apply(this, arguments);
+            (this.preShow || leto.emptyFn).apply(this, arguments);
 
             var html = templateRender.apply(null, arguments);
-            (this.show || Leto.emptyFn)(html);
+            (this.show || leto.emptyFn)(html);
 
-            (this.postShow || Leto.emptyFn).apply(this, arguments);
+            (this.postShow || leto.emptyFn).apply(this, arguments);
         };
     };
 
     var _getTemplateRender = function(templatePath)
     {
-        var renderer = Leto.mvc.Renderer.getInstance();
+        var renderer = leto.mvc.renderer;
         var renderFn;
 
         switch (templatePath.slice(templatePath.lastIndexOf(".") + 1))
         {
             case "jst":
-                renderFn = function(data) { return renderer.jstUrlRender(templatePath, data) };
+                renderFn = function(data) { return renderer.renderJst(templatePath, data) };
                 break;
-            case "xsl":
-                renderFn = function(data) { return renderer.xsltUrlRender(templatePath, data) };
-                break;
+            //case "xsl":
+            //    renderFn = function(data) { return renderer.xsltUrlRender(templatePath, data) };
+            //    break;
         };
 
         return renderFn;

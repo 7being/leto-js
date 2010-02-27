@@ -1,13 +1,14 @@
-(function(){
-Leto.namespace('Leto.util');
+(function() {
+leto.namespace('Leto.util');
 
-Leto.util.DatePretty = {
-
-    pretty: function(time) {
+var self = leto.util.DatePretty =
+{
+    pretty: function(time)
+    {
         var diff = (new Date - time) / 1000,
             day_diff = Math.floor(diff / 86400);
                 
-        if ( isNaN(day_diff) || day_diff < 0 || time == 0 )//|| day_diff >= 31 )
+        if (isNaN(day_diff) || day_diff < 0 || time == 0)//|| day_diff >= 31 )
             return;
                 
         return day_diff == 0 && (
@@ -23,6 +24,6 @@ Leto.util.DatePretty = {
     }
 };
 
-)();
+})();
 
 //  EOF

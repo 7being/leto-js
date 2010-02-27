@@ -1,10 +1,11 @@
-(function(){
+(function() {
 
-Leto.namespace('Leto.util');
+leto.namespace('leto.util');
 
-Leto.util.Format = {
-
-    usPhone: function(str) {
+leto.util.Format =
+{
+    usPhone: function(str)
+    {
         str = (str + '').replace(/[^\d]/g, '');
 
         var sb = [];
@@ -15,8 +16,8 @@ Leto.util.Format = {
         sb.unshift(str.slice(0, 3));
         if (str.length > 0) sb.unshift('(');
 
-		return sb.join('');
-	}
+        return sb.join('');
+    }
 };
 
 })();

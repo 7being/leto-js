@@ -1,12 +1,13 @@
 (function(){
-leto.namespace('leto.util.DateFormat');
+leto.namespace('leto.util');
 //===========================================================================
 // DATE FORMAT
 //===========================================================================
 /*
  * @class	DateFormat
  */
-var self = leto.util.DateFormat = function(pattern) {
+var self = leto.util.DateFormat = function(pattern)
+{
     //=======================================================================
     // MEMBERS
     //=======================================================================
@@ -15,7 +16,8 @@ var self = leto.util.DateFormat = function(pattern) {
 };
 
 
-self.CONSTANTS = {
+self.CONSTANTS =
+{
     //=======================================================================
     // CONSTANTS
     //=======================================================================
@@ -89,7 +91,8 @@ self.CONSTANTS = {
     _weekdays: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ]
 };
 
-self.prototype = {
+self.prototype =
+{
     //=======================================================================
     // METHODS
     //=======================================================================
@@ -97,7 +100,8 @@ self.prototype = {
     //-----------------------------------------------------------------------
     // FORMAT
     //-----------------------------------------------------------------------
-    format: function(dt) {
+    format: function(dt)
+    {
         var buffer = [];
 
         //Calculate the various date/time components.
@@ -132,7 +136,8 @@ self.prototype = {
 
         var CONST = self.CONSTANTS;
         //Build the result string using the parsed pattern as a template.
-        for (var i = 0; i < this._tokens.length; i++) {
+        for (var i = 0; i < this._tokens.length; i++)
+        {
                 var token = this._tokens[i];
                 var c = token.charAt(0);
                 switch (c) {
@@ -284,13 +289,14 @@ self.prototype = {
      * @return	{string} The string representation of the given number, 
      *			zero-padded	to the minimum number of digits.
      */
-    _formatNumber: function(num, minDigits) {
-            var result = '' + num;
-            while (result.length < minDigits) {
-                    result = '0' + result;
-            }
-
-            return result;
+    _formatNumber: function(num, minDigits)
+    {
+        var result = '' + num;
+        while (result.length < minDigits)
+        {
+            result = '0' + result;
+        }
+        return result;
     },
 
     //-----------------------------------------------------------------------
