@@ -31,6 +31,12 @@ leto.mvc.dispatcher =
         var args = Array.prototype.slice.call(arguments, 2);
 
         var control = _table[controlName];
+        if (!control)
+        {
+        
+            throw "Controller registered with name " + controlName + " is not found.";
+        }
+
         if (!control[action])
         {
             throw "Action " + action + " not found in " + controlName + " controller.";

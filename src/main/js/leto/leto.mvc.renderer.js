@@ -33,6 +33,10 @@ var self = leto.mvc.renderer =
     {
         var args = Array.prototype.slice.call(arguments, 2);
         var view = _table[viewName];
+        if (!view)
+        {
+            throw 'View registered with name ' + viewName + ' is not found.';
+        }
         var method = 'render' + render.charAt(0).toUpperCase() + render.slice(1);
         if (!view[method])
         {
@@ -47,17 +51,17 @@ var self = leto.mvc.renderer =
     /**
      * @require TrimPath
      */
-    renderJst: function(template, data) 
+    renderJst: function(template, data, /*optional*/isContent)
     {
         var jst;
-        if (self.cache)
+        if (!isContent && self.cache)
         {
-            var crc32 = leto.algo.crc32(template);
-            jst = _cache[crc32] = _cache[crc32] || _parseJstTemplate(template);
+            //var crc32 = leto.algo.crc32(template);
+            jst = _cache[template] = _cache[template] || _parseJstTemplate(template);
         }
         else
         {
-            jst = _parseJstTemplate(template);
+            jst = _parseJstTemplate(template, isContent);
         }
 
     	var result = jst.process(data);
@@ -140,10 +144,15 @@ var self = leto.mvc.renderer =
     //--------------------------------------------------------------------------
     // JST PARSE JST
     //--------------------------------------------------------------------------
-    var _parseJstTemplate = function(template) 
+    var _parseJstTemplate = function(template, isContent) 
     {
         var jst;
-        if (document.getElementById(template))
+
+        if (isContent)
+        {
+            jst = TrimPath.parseTemplate(template);
+        }
+        else if (document.getElementById(template))
         {
             jst = TrimPath.parseDOMTemplate(template);
         }
@@ -151,10 +160,7 @@ var self = leto.mvc.renderer =
         {
             jst = TrimPath.parseTemplate(_fetch(template));
         }
-        else
-        {
-            jst = TrimPath.parseTemplate(template);
-        }
+
         return jst;
     };
 
