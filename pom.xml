@@ -63,13 +63,13 @@
             </goals>
 	    <configuration>
 	      <browsers>
-                <!--
                 c:\program files\Internet Explorer\iexplore.exe
-                -->
+                <!--
                 C:\Program Files\Mozilla Firefox\firefox.exe
+                -->
 	      </browsers>
               <port>8888</port>
-              <skip>true</skip>
+              <skip>false</skip>
 	    </configuration>
           </execution>
           <execution>

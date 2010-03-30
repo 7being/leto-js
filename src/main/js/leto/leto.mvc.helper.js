@@ -21,6 +21,24 @@ var self = leto.mvc.helper =
         {
             var key = this.name || this.id;
 
+            if (!key) return;
+            if ($(this).is(':checkbox') || $(this).is(':radio'))
+            {
+                if (!this.checked) return;
+            }
+            if (result[key])
+            {
+                if (!result[key].join)
+                {
+                    result[key] = [result[key]];
+                }
+                result[key].push(_val(this));
+            }
+            else
+            {
+                result[key] = _val(this);
+            }
+            /*
             if (!key)
             {
                 if (this.tagName.toLowerCase() == 'option' && this.selected)
@@ -60,6 +78,7 @@ var self = leto.mvc.helper =
                     result[key].push(_val(this));
                 }
             }
+            */
         });
 
         return result;
